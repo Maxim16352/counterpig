@@ -63,7 +63,7 @@ html, body {
     overflow-y: auto;
 }
 
-/* Заголовок */
+/* Заголовок 1*/
 .helloText {
     font-family: 'Fascinate1', Arial, sans-serif;
     font-size: 24px;
@@ -178,6 +178,7 @@ html, body {
         border-radius: 28px 28px 0 0;
     }
 }
+
 
 
 
