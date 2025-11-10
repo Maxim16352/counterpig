@@ -99,7 +99,7 @@ html, body {
 }
 
 .glass-textarea {
-    width: 100%;
+    width: 329px;
     height: 44px;
     resize: none; 
     padding: 10px 14px;
@@ -125,7 +125,7 @@ html, body {
 /* Кнопка */
 .glass-button {
     width: 100%;
-    max-width: 360px;
+    max-width: 329px;
     height: 64px;
     margin-top: 100px;
     font-family: 'Fascinate1', Arial, sans-serif;
@@ -179,3 +179,4 @@ html, body {
         border-radius: 28px 28px 0 0;
     }
 }
+
