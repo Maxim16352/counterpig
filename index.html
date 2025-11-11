@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CounterApp</title>
 </head>
 <body>
@@ -13,7 +14,7 @@
             <img src="pepeMain.gif" alt="" width="125" height="125" class="pepe"> 
             <div class="textarea-container">
                 <label class="textAreaLabel">Введите серийный номер копилки</label>
-                <textarea class="glass-textarea" id="serial" maxlength="10" placeholder=""></textarea>
+                <input id="serial" type="text" class="glass-textarea" maxlength="9" inputmode="latin" pattern="[A-Z]*" placeholder="XXXX-XXXX" style="text-transform: uppercase;"/>
             </div>
             <button class="glass-button">Готово</button>
 
@@ -22,5 +23,4 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="app.js"></script>
 </body>
-
 </html>
