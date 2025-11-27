@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Гарантируем, что Telegram готов
         tg.ready();
 
         // Разворачиваем на весь экран
@@ -227,6 +226,7 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
 
 
