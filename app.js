@@ -4,25 +4,25 @@ const container = document.querySelector('.container');
 const mainBlock = document.querySelector('.glass-container.main');
 
 
-if (window.Telegram && window.Telegram.WebApp) {
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Разворачиваем Web App на весь экран
+        // Гарантируем, что Telegram готов
+        tg.ready();
+
+        // Разворачиваем на весь экран
         tg.expand();
 
-        // Получаем информацию о пользователе
+        // Получаем имя пользователя
         const user = tg.initDataUnsafe?.user;
-
-        if (user) {
-            const username = user.first_name + (user.last_name ? " " + user.last_name : "");
-            document.querySelector('.nameUser').textContent = username;
-        } else {
-            document.querySelector('.nameUser').textContent = "Гость";
-        }
+        document.querySelector('.nameUser').textContent = user 
+            ? user.first_name + (user.last_name ? " " + user.last_name : "") 
+            : "Гость";
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
-
+});
 textarea.addEventListener('input', (e) => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
@@ -227,6 +227,7 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
 
 
