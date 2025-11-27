@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
+});
 
 
 textarea.addEventListener('input', (e) => {
@@ -236,5 +237,6 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
 
