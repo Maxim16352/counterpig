@@ -3,57 +3,58 @@ const doneBtn = document.getElementById('doneBtn');
 const container = document.querySelector('.container');
 const mainBlock = document.querySelector('.glass-container.main');
 
+/*------------------------------------------------------------------
+  Центрация input (для Telegram WebApp + мобильной клавиатуры)
+------------------------------------------------------------------*/
+function ensureVisible(el) {
+    setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+    setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
+    setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 500);
+}
 
-
-
+/*------------------------------------------------------------------
+  TELEGRAM NAME
+------------------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
-    // Telegram WebApp
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // полноэкранно
+        tg.expand();
 
-        // Имя пользователя
         const user = tg.initDataUnsafe?.user;
-        document.querySelector('.nameUser').textContent = user 
-            ? user.first_name + (user.last_name ? " " + user.last_name : "")
-            : "Гость";
+        document.querySelector('.nameUser').textContent =
+            user
+                ? user.first_name + (user.last_name ? " " + user.last_name : "")
+                : "Гость";
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
 });
 
-
-textarea.addEventListener('input', (e) => {
+/*------------------------------------------------------------------
+  Маска для серийного номера
+------------------------------------------------------------------*/
+textarea.addEventListener('input', () => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
 
-    if (value.length > 4) {
-        textarea.value = value.slice(0, 4) + '-' + value.slice(4);
-    } else {
-        textarea.value = value;
-    }
+    textarea.value =
+        value.length > 4 ? value.slice(0, 4) + "-" + value.slice(4) : value;
 });
 
 
+/*------------------------------------------------------------------
+  Основа: нажали ГОТОВО
+------------------------------------------------------------------*/
 doneBtn.addEventListener('click', () => {
     const fullSerial = textarea.value.trim();
 
-    if (!fullSerial) {
-        alert("Введите серийный номер");
+    if (!fullSerial || fullSerial.length !== 9) {
+        alert("Введите серийный номер формата XXXX-XXXX");
         return;
     }
 
-    if (fullSerial.length !== 9) {
-        alert("Серийный номер должен быть формата XXXX-XXXX");
-        return;
-    }
-
-    // Прячем кнопку
-    setTimeout(() => {
-        doneBtn.classList.add('hide');
-    }, 10);
-
+    doneBtn.classList.add('hide');
     container.classList.add('active');
 
     // Удаляем стартовые элементы
@@ -64,25 +65,31 @@ doneBtn.addEventListener('click', () => {
 
     const main = document.querySelector('.glass-container.main');
 
-
-
+    /*--------------------------------------------------------------
+      Главное GIF
+    --------------------------------------------------------------*/
     const img = document.createElement('img');
     img.src = "CounterMenu.gif";
     img.classList.add('jem-image');
     main.appendChild(img);
-
     setTimeout(() => img.classList.add('show'), 30);
 
+    /*--------------------------------------------------------------
+      Значения
+    --------------------------------------------------------------*/
     let titleValue = "Моя копилка";
     let balanceValue = 0;
-
     let previousBalance = 0;
-    let tempBalance = null;      // <– временное значение (что введено в input)
+
+    let tempBalance = null;
 
     let totalPlus = 0;
     let totalMinus = 0;
 
 
+    /*--------------------------------------------------------------
+      Создание строки (текст + иконка)
+    --------------------------------------------------------------*/
     function createRow(textValue, imgSrc, action) {
         const row = document.createElement('div');
         row.classList.add('rowBlock');
@@ -94,53 +101,56 @@ doneBtn.addEventListener('click', () => {
         const icon = document.createElement('img');
         icon.src = imgSrc;
         icon.classList.add('rowIcon');
-        icon.dataset.action = action;
 
+        /*------------------ РЕДАКТИРОВАНИЕ НАЗВАНИЯ ------------------*/
         if (action === "edit") {
             icon.addEventListener('click', () => {
-            const text = row.querySelector('.rowText');
-            if (row.querySelector('input')) return;
+                if (row.querySelector('input')) return;
 
-            const input = document.createElement('input');
-            input.type = "text";
-            input.classList.add('editInput');
-            input.value = text.textContent;
+                const input = document.createElement('input');
+                input.type = "text";
+                input.classList.add('editInput');
+                input.value = text.textContent;
 
-            // показываем, что редактируем
-            text.style.opacity = 0.5;
+                input.setAttribute("enterkeyhint", "done");
+                input.setAttribute("autocomplete", "off");
+                input.setAttribute("autocorrect", "off");
+                input.setAttribute("autocapitalize", "off");
 
-            // скроллим к полю
-            setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
-                 input.addEventListener('focus', () => {
-                
-                main.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                text.style.opacity = 0.4;
+
+                row.replaceChild(input, text);
+                input.focus();
+                ensureVisible(input);
+
+                const restoreText = () => {
+                    titleValue = input.value || titleValue;
+                    text.textContent = titleValue;
+                    row.replaceChild(text, input);
+                    text.style.opacity = 1;
+
+                    setTimeout(() => {
+                        row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                    }, 120);
+                };
+
+                input.addEventListener('blur', restoreText);
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        restoreText();
+                        input.blur();
+                    }
+                    if (e.key === "Escape") {
+                        row.replaceChild(text, input);
+                        text.style.opacity = 1;
+                    }
+                });
             });
-            const restoreText = () => {
-                titleValue = input.value || titleValue;
-                text.textContent = titleValue;
-                row.replaceChild(text, input);
-
-                // возвращаем блок на место
-                
-                text.style.opacity = 1;
-            };
-
-            input.addEventListener('blur', restoreText);
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    restoreText();
-                    input.blur();
-                }
-                if (e.key === 'Escape') row.replaceChild(text, input);
-            });
-
-            row.replaceChild(input, text);
-            input.focus();
-    });
-
         }
 
+        /*------------- ПОКАЗАТЬ / СКРЫТЬ СЕРИЙНИК -------------*/
         if (action === "showserial") {
             icon.addEventListener('click', () => {
                 if (text.dataset.shown === "true") {
@@ -163,67 +173,79 @@ doneBtn.addEventListener('click', () => {
     }
 
 
-    const serialMasked = fullSerial.slice(0, 4) + "-****";
-    const serialRow = createRow(serialMasked, "openeye.png", "showserial");
-    const nameRow = createRow(titleValue, "pen.png", "edit");
+    /*--------------------------------------------------------------
+      Строки
+    --------------------------------------------------------------*/
+    createRow(fullSerial.slice(0, 4) + "-****", "openeye.png", "showserial");
+    createRow(titleValue, "pen.png", "edit");
 
 
+    /*--------------------------------------------------------------
+      БАЛАНС
+    --------------------------------------------------------------*/
     const balanceText = document.createElement('p');
     balanceText.classList.add('balance-text');
     balanceText.textContent = balanceValue + ",00₽";
     main.appendChild(balanceText);
-
     setTimeout(() => balanceText.classList.add('show'), 30);
-    
-    
-balanceText.addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.type = "text";
-    input.inputMode = "numeric";
-    input.pattern = "[0-9]*";
-    input.classList.add('editInput');
-    input.value = balanceValue;
 
-    balanceText.style.opacity = 0.5;
-    
-    main.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    // скроллим к полю
-    setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+    balanceText.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = "text";
+        input.inputMode = "numeric";
+        input.pattern = "[0-9]*";
+        input.classList.add('editInput');
+        input.value = balanceValue;
 
-    input.addEventListener('input', () => {
-        input.value = input.value.replace(/[^0-9]/g, '');
-        tempBalance = input.value ? Number(input.value) : null;
+        // Включаем Enter / Done кнопку
+        input.setAttribute("enterkeyhint", "done");
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("autocorrect", "off");
+        input.setAttribute("autocapitalize", "off");
+
+        balanceText.style.opacity = 0.4;
+
+        main.replaceChild(input, balanceText);
+        input.focus();
+        ensureVisible(input);
+
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            tempBalance = input.value ? Number(input.value) : null;
+        });
+
+        const restoreBalance = () => {
+            const newVal = input.value ? Number(input.value) : balanceValue;
+
+            balanceValue = newVal;
+            balanceText.textContent = newVal + ",00₽";
+
+            main.replaceChild(balanceText, input);
+            balanceText.style.opacity = 1;
+
+            setTimeout(() => {
+                balanceText.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 120);
+        };
+
+        input.addEventListener('blur', restoreBalance);
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                restoreBalance();
+                input.blur();
+            }
+            if (e.key === "Escape") {
+                main.replaceChild(balanceText, input);
+                balanceText.style.opacity = 1;
+            }
+        });
     });
 
-    const restoreBalanceText = () => {
-         const newBalance = input.value ? Number(input.value) : balanceValue;
-        balanceValue = newBalance;
-        balanceText.textContent = newBalance + ",00₽";
-        main.replaceChild(balanceText, input);
-
-        // возвращаем блок обратно
-        
-        balanceText.style.opacity = 1;
-        tempBalance = newBalance;
-    };
-
-    input.addEventListener('blur', restoreBalanceText);
-
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            restoreBalanceText();
-            input.blur();
-        }
-        if (e.key === 'Escape') main.replaceChild(balanceText, input);
-    });
-
-    main.replaceChild(input, balanceText);
-    input.focus();
-});
-
-
-
+    /*--------------------------------------------------------------
+      Кнопка "Применить изменения"
+    --------------------------------------------------------------*/
     const bottomBtn = document.createElement('button');
     bottomBtn.textContent = "Применить изменения";
     bottomBtn.classList.add('glass-button1');
@@ -233,43 +255,31 @@ balanceText.addEventListener('click', () => {
 
     bottomBtn.addEventListener('click', () => {
 
+        if (tempBalance !== null) {
+            const newBalance = tempBalance;
+            const diff = newBalance - previousBalance;
 
-    // ======= Сохранение баланса =======
-    if (tempBalance !== null) {
-        const newBalance = tempBalance;
-        const diff = newBalance - previousBalance;
+            balanceValue = newBalance;
+            previousBalance = newBalance;
 
-        balanceValue = newBalance;
-        previousBalance = newBalance;
+            balanceText.textContent = balanceValue + ",00₽";
 
-        balanceText.textContent = balanceValue + ",00₽";
+            if (diff < 0) {
+                totalMinus += Math.abs(diff);
+            } else if (diff > 0) {
+                totalPlus += diff;
+            }
 
-        // Накопление пополнений / трат
-        if (diff < 0) {
-            totalMinus += Math.abs(diff);
-        } else if (diff > 0) {
-            totalPlus += diff;
+            document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
+            document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
+            tempBalance = null;
         }
 
-        // ======= Обновляем UI =======
-        document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
-        document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
-
-        // Сбрасываем временное значение
-        tempBalance = null;
-    }
-
-    console.log("СОХРАНЕНО:", {
-        name: titleValue,
-        balance: balanceValue,
-        plus: totalPlus,
-        minus: totalMinus
+        console.log("СОХРАНЕНО:", {
+            name: titleValue,
+            balance: balanceValue,
+            plus: totalPlus,
+            minus: totalMinus
+        });
     });
 });
-});
-
-
-
-
-
-
