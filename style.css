@@ -1,53 +1,28 @@
+/* ---------- базовые стили (твой существующий CSS, сокращённо + важные правки) ---------- */
+
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     background: #f2f2f2;
-    -webkit-user-select: none; /* запрещаем выделение */
-    -ms-user-select: none;
-    user-select: none;
-    overflow: hidden; /* чтобы при вводе не скроллилось */
-    touch-action: manipulation; /* предотвращаем двойное масштабирование */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    position: relative;
+    position: relative; /* Важно: relative */
     width: 100%;
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden;   /* можно оставить, прокрутка внутри main */
 }
 
-.glass-container.main {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    bottom: 0;
-    border-radius: 28px 28px 0 0;
-    background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(22px) saturate(160%);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    border: 1px solid rgba(255,255,255,0.36);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    box-sizing: border-box;
-    padding: 24px 16px;
-    overflow-y: auto;
-    transition: transform 0.6s ease;
-    transform: translateY(45px); /* стартовая позиция */
-}
-
+/* ---------- верхний блок ---------- */
 .glass-container.top {
     position: fixed;
-    flex-direction: column;
     width: 100%;
-    height: 170px;
-    top: -100px;
+    height: 190px;
+    top: 0;              /* по умолчанию закрыт сверху (будет анимироваться через .container.active) */
     left: 0;
     border-radius: 0 0 20px 20px;
     background: rgba(255,255,255,0.35);
@@ -59,139 +34,73 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 
-    justify-content: space-between; /* Ð’ÐÐ–ÐÐž â€” Ñ€Ð°ÑÐ¿Ñ€ÐµÐ´ÐµÐ»ÑÐµÐ¼ nameInfo ÑÐ²ÐµÑ€Ñ…Ñƒ, payment ÑÐ½Ð¸Ð·Ñƒ */
-
-    padding: 15px 0; /* Ð½ÐµÐ¼Ð½Ð¾Ð³Ð¾ Ð¾Ñ‚ÑÑ‚ÑƒÐ¿Ð¾Ð² */
-    opacity: 0;
-    transition: top 0.6s ease, opacity 0.6s ease;
+    padding: 14px 0;
     z-index: 999;
+    transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
-.container.active .glass-container.main {
-    transform: translateY(234px);
+/* Класс убирающий верхний блок вверх */
+.glass-container.top.away {
+    transform: translateY(-220px);
+    opacity: 0;
 }
 
-.container.active .glass-container.top {
-    top: 0;
-    opacity: 1;
-}
-
-@font-face {
-    font-family: 'Fascinate';
-    src: url('SFProText-Regular.ttf') format('truetype');
-    font-display: swap;
-}
-@font-face {
-    font-family: 'Apple';
-    src: local('Apple Color Emoji'), local('AppleColorEmoji'), local('apple-color-emoji');
-    src:
-    url('.AppleColorEmojiUI.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-@font-face {
-    font-family: 'Fascinate1';
-    src: url('SFProText-Bold.ttf') format('truetype');
-    font-display: swap;
-}
-@font-face {
-    font-family: 'fira';
-    src: url('FiraCode-Bold.ttf') format('truetype');
-    font-display: swap;
-}
-
-.helloText {
-    font-family: 'Fascinate1', Arial, sans-serif;
-    font-size: 24px;
-    margin-top: 32px;
-    color: #585858;
-    text-align: center;
-}
-
-.pepe {
-    margin-top: 32px;
-    max-width: 70%;
-    height: auto;
-    display: block;
-}
-
-
-.textarea-container {
+/* ---------- главный (основной) блок ---------- */
+/* ВАЖНО: прокрутка должна быть ВНУТРИ main, поэтому height и overflow-y */
+.glass-container.main {
+    position: absolute;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    max-width: 360px;
-    margin: 30px auto;
+    height: 100%;
+    border-radius: 28px 28px 0 0;
+    background: rgba(255,255,255,0.28);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.36);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    opacity: 1;               
-    transition: opacity 1000ms ease;
+
+    box-sizing: border-box;
+    padding: 24px 16px;
+
+    /* КЛЮЧЕВОЕ: прокрутка внутри блока */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    transition: transform 0.6s ease;
+    transform: translateY(45px); /* стартовая позиция (можно оставить) */
 }
 
-.textAreaLabel {
-    font-family: 'Fascinate1', Arial, sans-serif;
-    font-size: 13px;
-    color: #585858;
+/* Когда контейнер .active — main поднимается визуально */
+.container.active .glass-container.main {
+    transform: translateY(216px);
 }
+
+/* ---------- полезные классы и элементы ---------- */
+.helloText { font-family: 'Fascinate1', Arial, sans-serif; font-size: 24px; margin-top: 32px; color: #585858; text-align: center; }
+.pepe { margin-top: 32px; max-width: 70%; height: auto; display: block; }
+
+.textarea-container { width: 100%; max-width: 360px; margin: 30px auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.textAreaLabel { font-family: 'Fascinate1', Arial, sans-serif; font-size: 13px; color: #585858; }
 
 .glass-textarea {
-    width: 310px;
-    height: 44px;
-    resize: none;
-    padding: 10px 14px;
-    font-size: 30px;
-    line-height: 1.4;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #585858;
-    background: rgba(255,255,255,0.35);
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 34px;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
-    outline: none;
-    text-align: center;
-    transition: 0.2s ease;
-    opacity: 1;               
-    transition: opacity 1000ms ease;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 310px; height: 44px; padding: 10px 14px; font-size: 30px;
+    color: #585858; background: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 34px; outline: none; text-align: center;
 }
 
-.glass-textarea:focus, .glass-textarea:hover {
-    border-color: rgba(0,122,255,0.45);
-    box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
-}
-.glass-button1 {
-    position: fixed;
-    bottom: 30px; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%; /* ÃÂ¸ÃÂ»ÃÂ¸ ÃÂºÃÂ¾ÃÂ½ÃÂºÃ‘â‚¬ÃÂµÃ‘â€šÃÂ½ÃÂ°Ã‘Â Ã‘Ë†ÃÂ¸Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ° */
-    max-width: 329px;
-    height: 64px;
-    font-family: 'Fascinate1', Arial, sans-serif;
-    font-size: 18px;
-    color: #585858;
-    background: rgba(255,255,255,0.35);
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 34px;
-    cursor: pointer;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
-    transition: all 0.25s ease;
-    opacity: 0;               
-    transition: opacity 1000ms ease;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    z-index: 1000;
-}
-.glass-button {
+/* Кнопки */
+.glass-button, .glass-button1 {
     position: absolute;
-    bottom: 150px; /* ÃÂ¾Ã‘â€šÃ‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ ÃÂ¾Ã‘â€š ÃÂ½ÃÂ¸ÃÂ¶ÃÂ½ÃÂµÃÂ³ÃÂ¾ ÃÂºÃ‘â‚¬ÃÂ°Ã‘Â Ã‘ÂÃÂºÃ‘â‚¬ÃÂ°ÃÂ½ÃÂ° */
     left: 50%;
     transform: translateX(-50%);
-    width: 90%; /* ÃÂ¸ÃÂ»ÃÂ¸ ÃÂºÃÂ¾ÃÂ½ÃÂºÃ‘â‚¬ÃÂµÃ‘â€šÃÂ½ÃÂ°Ã‘Â Ã‘Ë†ÃÂ¸Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ° */
+    width: 90%;
     max-width: 329px;
     height: 64px;
     font-family: 'Fascinate1', Arial, sans-serif;
@@ -201,184 +110,51 @@ html, body {
     border: 1px solid rgba(255,255,255,0.45);
     border-radius: 34px;
     cursor: pointer;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
-    transition: all 0.25s ease;
-    opacity: 1;               
-    transition: opacity 1000ms ease;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.glass-button1.show {
-    opacity: 1;                /* fade-in */
-}
-.glass-button.hide {
-    opacity: 0;                /* fade-in */
+    transition: all 0.25s ease, opacity 0.25s ease;
 }
 
-.glass-button:active,
-.glass-button:hover {
-    border-color: rgba(0,122,255,0.45);
-    box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
-}
-.glass-button1:hover {
-    border-color: rgba(0,122,255,0.45);
-    box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
-}
-.glass-button.up {
-    bottom: 50px;
-}
+/* стартовые позиции */
+.glass-button { bottom: 150px; opacity: 1; }
+.glass-button1 { bottom: 30px; opacity: 0; }
 
+/* показать нижнюю кнопку */
+.glass-button1.show { opacity: 1; }
+
+/* анимация появления элементов main */
+.jem-image { margin-top: 32px; width: 170px; height: 170px; opacity: 0; transition: opacity 0.4s ease; }
+.jem-image.show { opacity: 1; }
+.rowBlock { margin: 0 auto 8px; display:flex; align-items:center; gap:12px; width: fit-content; opacity: 0; transition: opacity 0.35s ease; }
+.rowBlock.show { opacity: 1; }
+.rowText { font-family: 'Fascinate1', Arial, sans-serif; font-size: 20px; color: #585858; }
+.balance-text { margin-top: 20px; font-family: 'fira', Arial, sans-serif; font-size: 40px; color: #585858; opacity: 0; transition: opacity 0.35s ease; }
+.balance-text.show { opacity: 1; }
+.editInput { padding: 8px 12px; font-size: 18px; border-radius: 12px; margin-top: 10px; margin-bottom: 10px; border: 1px solid #aaa; outline: none; width: 180px; background: rgba(255,255,255,0.45); }
+
+/* Верхний инфобокс */
+.glass-nameInfo { width: 80%; height: 40px; padding: 8px 14px; background: rgba(255,255,255,0.35); border-radius: 34px; display:flex; align-items:center; justify-content:center; box-sizing: border-box; }
+.infouser { width: 100%; display:flex; justify-content:space-between; align-items:center; }
+.nameUser { font-family:'Fascinate1', Arial, sans-serif; font-size: 16px; color:#585858; margin:0; text-align:center; }
+.checkconnect { font-family: 'Apple', Arial, sans-serif; font-size:20px; margin:0; }
+.buttonInfo { width:25px; height:25px; }
+
+/* plus/minus blocks */
+.glass-payment { width: 80%; display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; }
+.plusblock, .minusblock {
+    width: 140px; height: 70px;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 20px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
+}
+.plusblock p, .minusblock p { margin: 0; font-family: 'Fascinate1', Arial, sans-serif; color: #585858; font-size: 14px; }
+.moneyPlus { font-size: 18px; margin-top:6px; }
+.moneyMinus { font-size: 18px; margin-top:6px; }
+
+/* responsive tweaks */
 @media (max-width: 480px) {
-    .helloText {
-        font-size: 24px;
-        margin-top: 24px;
-    }
-
-    .pepe {
-        margin-top: 28px;
-        max-width: 60%;
-    }
-
-    .glass-textarea {
-        height: 44px;
-        font-size: 30px;
-    }
-
-    .textAreaLabel {
-        font-size: 13px;
-    }
-
-    .glass-container.main {
-        padding: 20px 12px;
-        border-radius: 28px 28px 0 0;
-    }
+    .jem-image { width: 140px; height: 140px; }
+    .balance-text { font-size: 34px; }
+    .glass-button, .glass-button1 { height: 64px; }
 }
-.jem-image {
-    margin-top: 32px;
-    max-width: 70%;
-    height: 170px;
-    width: 170px;
-    display: block;
-    opacity: 0;                
-    transition: opacity 1000ms ease;
-}
-
-.jem-image.show {
-    opacity: 1;                
-}
-.rowBlock {
-    margin: 0 auto -30px; /* Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â²ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã¢â‚¬Â¦Ãƒâ€˜Ã†â€™ 0, ÃƒÂÃ‚Â¿ÃƒÂÃ‚Â¾ ÃƒÂÃ‚Â±ÃƒÂÃ‚Â¾ÃƒÂÃ‚ÂºÃƒÂÃ‚Â°ÃƒÂÃ‚Â¼ auto, Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â·Ãƒâ€˜Ã†â€™ 25px */
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: fit-content;
-    opacity: 0;               
-    transition: opacity 1000ms ease;
-}
-.rowBlock.show {
-    opacity: 1;                
-}
-
-.rowText {
-    font-family: 'Fascinate1', Arial, sans-serif;
-    font-size: 20px;
-    color: #585858;
-}
-.balance-text{
-    margin-top: 20px ;
-    font-family: 'fira', Arial, sans-serif;
-    font-size: 40px;
-    color: #585858;
-    opacity: 0;                /* Ã‘ÂÃ‘â€šÃÂ°Ã‘â‚¬Ã‘â€š */
-    transition: opacity 1000ms ease;
-}
-.balance-text.show {
-    opacity: 1;                /* fade-in */
-}
-.editInput {
-    padding: 6px 10px;
-    font-size: 18px;
-    border-radius: 12px;
-    margin-top:20px;
-    margin-bottom:20px;
-    border: 1px solid #aaa;
-    outline: none;
-    width: 180px;
-    background: rgba(255,255,255,0.45);
-}
-.glass-nameInfo {
-    width: 80%;
-    height: 40px;
-
-    padding: 10px 14px;
-    background: rgba(255,255,255,0.35);
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 34px;
-    backdrop-filter: blur(18px) saturate(160%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Ñ†ÐµÐ½Ñ‚Ñ€Ð¸Ñ€ÑƒÐµÐ¼ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð±Ð»Ð¾Ðº */
-}
-.nameUser{
-    font-family: 'Fascinate1', Arial, sans-serif;
-    font-size: 16px;
-    color: #585858;
-    flex: 1;
-    text-align:center;
-}
-.checkconnect{
-    font-family: 'Apple', Arial, sans-serif;
-    font-size: 20px;
-    color: #585858;
-}
-.buttonInfo{
-    width:25px;
-    height:25;
-}
-.infouser {
-    width: 100%;
-    display: flex;
-    justify-content: space-between; /* â† Ð›Ð•Ð’Ðž, Ð¦Ð•ÐÐ¢Ð , ÐŸÐ ÐÐ’Ðž */
-    align-items: center;
-}
-.plusblock,
-.minusblock {
-    width: 45%;
-    height: 90px;
-    background: rgba(255,255,255,0.35);
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 34px;
-    backdrop-filter: blur(18px) saturate(160%);
-}
-.glass-payment {
-    width: 85%;               /* Ñ‚Ð°ÐºÐ°Ñ Ð¶Ðµ ÑˆÐ¸Ñ€Ð¸Ð½Ð°, ÐºÐ°Ðº Ð¸ nameInfo */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.namePlus,
-.nameMinus{
-    text-align: center;
-    font-family: 'Fascinate1', Arial, sans-serif;
-    color: #585858;
-    font-size: 16px;
-}
-.moneyPlus{
-    text-align: center;
-    font-family: 'Fascinate1', Arial, sans-serif;
-    color: #438D39;
-    font-size: 20px;
-    margin-top:5px;
-}
-.moneyMinus{
-    text-align: center;
-    font-family: 'Fascinate1', Arial, sans-serif;
-    color: #8D3939;
-    font-size: 20px;
-    margin-top:5px;
-}
-
-
-
