@@ -6,25 +6,24 @@ const mainBlock = document.querySelector('.glass-container.main');
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (window.Telegram && window.Telegram.WebApp) {
+if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Гарантируем, что Telegram готов
-        tg.ready();
-
-        // Разворачиваем на весь экран
+        // Разворачиваем Web App на весь экран
         tg.expand();
 
-        // Получаем имя пользователя
+        // Получаем информацию о пользователе
         const user = tg.initDataUnsafe?.user;
-        document.querySelector('.nameUser').textContent = user 
-            ? user.first_name + (user.last_name ? " " + user.last_name : "") 
-            : "Гость";
+
+        if (user) {
+            const username = user.first_name + (user.last_name ? " " + user.last_name : "");
+            document.querySelector('.nameUser').textContent = username;
+        } else {
+            document.querySelector('.nameUser').textContent = "Гость";
+        }
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
-});
 
 
 textarea.addEventListener('input', (e) => {
@@ -101,22 +100,42 @@ doneBtn.addEventListener('click', () => {
 
         if (action === "edit") {
             icon.addEventListener('click', () => {
-                if (row.querySelector('input')) return;
+                const text = row.querySelector('.rowText');
+                if (row.querySelector('input')) return; // уже редактируется
 
                 const input = document.createElement('input');
                 input.type = "text";
-                input.value = text.textContent;
                 input.classList.add('editInput');
+                input.value = text.textContent;
+
+                // показываем, что редактируем
+                text.style.opacity = 0.5;
+
+                // поднимаем блок main при фокусе
+                input.addEventListener('focus', () => {
+                    main.style.transform = 'translateY(-80px)';
+                });
+
+                const restoreText = () => {
+                    titleValue = input.value || titleValue;
+                    text.textContent = titleValue;
+                    row.replaceChild(text, input);
+                    main.style.transform = 'translateY(234px)'; // возвращаем блок
+                    text.style.opacity = 1;
+                };
+
+                input.addEventListener('blur', restoreText);
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        restoreText();
+                        input.blur();
+                    }
+                    if (e.key === 'Escape') row.replaceChild(text, input);
+                });
 
                 row.replaceChild(input, text);
                 input.focus();
-
-                input.addEventListener('blur', () => {
-                    titleValue = input.value;
-                    text.textContent = titleValue;
-
-                    row.replaceChild(text, input);
-                });
             });
         }
 
@@ -154,44 +173,54 @@ doneBtn.addEventListener('click', () => {
 
     setTimeout(() => balanceText.classList.add('show'), 30);
     
-    balanceText.addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = "text";
-        input.inputMode = "numeric";
-        input.pattern = "[0-9]*";
-        input.classList.add('editInput');
-        input.value = balanceValue;
+    
+balanceText.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = "text";
+    input.inputMode = "numeric";
+    input.pattern = "[0-9]*";
+    input.classList.add('editInput');
+    input.value = balanceValue;
 
-        input.addEventListener('input', () => {
-            input.value = input.value.replace(/[^0-9]/g, '');
-            tempBalance = input.value ? Number(input.value) : null; // обновляем tempBalance
-        });
+    // показываем, что редактируем
+    balanceText.style.opacity = 0.5;
 
-        const restoreBalanceText = () => {
-            const newBalance = input.value ? Number(input.value) : balanceValue;
-            balanceValue = newBalance;
-            balanceText.textContent = newBalance + ",00₽";
-            main.replaceChild(balanceText, input);
+    // поднимаем блок при фокусе
+    input.addEventListener('focus', () => {
+        main.style.transform = 'translateY(-80px)'; // поднимаем на 80px
+    });
 
-            // Обновляем tempBalance, чтобы потом сохранить на кнопку
-            tempBalance = newBalance;
-        };
+    // при вводе цифр обновляем временное значение
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        tempBalance = input.value ? Number(input.value) : null;
+    });
 
-        input.addEventListener('blur', restoreBalanceText);
-        input.addEventListener('keydown', (e) => {
+    // сохраняем значение и возвращаем блок на место
+    const restoreBalanceText = () => {
+        const newBalance = input.value ? Number(input.value) : balanceValue;
+        balanceValue = newBalance;
+        balanceText.textContent = newBalance + ",00₽";
+        main.replaceChild(balanceText, input);
+        main.style.transform = 'translateY(234px)'; // возвращаем блок
+        balanceText.style.opacity = 1; // возвращаем нормальный вид
+        tempBalance = newBalance;
+    };
+
+    input.addEventListener('blur', restoreBalanceText);
+
+    input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault();       // не отправлять форму
-            restoreBalanceText();     // сохраняем значение
-            input.blur();             // снимаем фокус, клавиатура убирается
+            e.preventDefault();
+            restoreBalanceText();
+            input.blur();
         }
-        if (e.key === 'Escape') {
-            main.replaceChild(balanceText, input); // отмена
-        }
+        if (e.key === 'Escape') main.replaceChild(balanceText, input);
     });
 
-        main.replaceChild(input, balanceText);
-        input.focus();
-    });
+    main.replaceChild(input, balanceText);
+    input.focus();
+});
 
 
     const bottomBtn = document.createElement('button');
@@ -237,6 +266,4 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
-
-
 
