@@ -6,20 +6,21 @@ const mainBlock = document.querySelector('.glass-container.main');
 
 
 
-if (window.Telegram && window.Telegram.WebApp) {
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Разворачиваем Web App на весь экран
+        // Гарантируем, что Telegram готов
+        tg.ready();
+
+        // Разворачиваем на весь экран
         tg.expand();
 
+        // Получаем имя пользователя
         const user = tg.initDataUnsafe?.user;
-
-        if (user) {
-            const username = user.first_name + (user.last_name ? " " + user.last_name : "");
-            document.querySelector('.nameUser').textContent = username;
-        } else {
-            document.querySelector('.nameUser').textContent = "Гость";
-        }
+        document.querySelector('.nameUser').textContent = user 
+            ? user.first_name + (user.last_name ? " " + user.last_name : "") 
+            : "Гость";
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
@@ -235,4 +236,5 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
