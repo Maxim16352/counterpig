@@ -3,6 +3,9 @@ const doneBtn = document.getElementById('doneBtn');
 const container = document.querySelector('.container');
 const mainBlock = document.querySelector('.glass-container.main');
 
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // Telegram WebApp
     if (window.Telegram && window.Telegram.WebApp) {
@@ -20,43 +23,66 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Форматирование серийного номер
-textarea.addEventListener('input', () => {
+
+textarea.addEventListener('input', (e) => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
-    textarea.value = value.length > 4 ? value.slice(0, 4) + '-' + value.slice(4) : value;
+
+    if (value.length > 4) {
+        textarea.value = value.slice(0, 4) + '-' + value.slice(4);
+    } else {
+        textarea.value = value;
+    }
 });
 
-// Нажатие на кнопку "Готово"
+
 doneBtn.addEventListener('click', () => {
     const fullSerial = textarea.value.trim();
 
-    if (!fullSerial) return alert("Введите серийный номер");
-    if (fullSerial.length !== 9) return alert("Серийный номер должен быть формата XXXX-XXXX");
+    if (!fullSerial) {
+        alert("Введите серийный номер");
+        return;
+    }
 
-    doneBtn.classList.add('hide');
+    if (fullSerial.length !== 9) {
+        alert("Серийный номер должен быть формата XXXX-XXXX");
+        return;
+    }
+
+    // Прячем кнопку
+    setTimeout(() => {
+        doneBtn.classList.add('hide');
+    }, 10);
+
     container.classList.add('active');
 
     // Удаляем стартовые элементы
-    document.querySelector('.helloText')?.remove();
-    document.querySelector('.pepe')?.remove();
-    document.querySelector('.textarea-container')?.remove();
+    document.querySelector('.helloText').remove();
+    document.querySelector('.pepe').remove();
+    document.querySelector('.textarea-container').remove();
     doneBtn.remove();
+
+    const main = document.querySelector('.glass-container.main');
+
+
 
     const img = document.createElement('img');
     img.src = "CounterMenu.gif";
     img.classList.add('jem-image');
-    mainBlock.appendChild(img);
+    main.appendChild(img);
+
     setTimeout(() => img.classList.add('show'), 30);
 
     let titleValue = "Моя копилка";
     let balanceValue = 0;
+
     let previousBalance = 0;
-    let tempBalance = null;
+    let tempBalance = null;      // <– временное значение (что введено в input)
+
     let totalPlus = 0;
     let totalMinus = 0;
 
-    // Создание строки с иконкой
+
     function createRow(textValue, imgSrc, action) {
         const row = document.createElement('div');
         row.classList.add('rowBlock');
@@ -71,7 +97,42 @@ doneBtn.addEventListener('click', () => {
         icon.dataset.action = action;
 
         if (action === "edit") {
-            makeEditable(row, text, () => titleValue, val => titleValue = val);
+            icon.addEventListener('click', () => {
+    const text = row.querySelector('.rowText');
+        if (row.querySelector('input')) return;
+
+        const input = document.createElement('input');
+        input.type = "text";
+        input.classList.add('editInput');
+        input.value = text.textContent;
+
+        // показываем, что редактируем
+        text.style.opacity = 0.5;
+
+        // скроллим к полю
+        setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+
+        const restoreText = () => {
+            titleValue = input.value || titleValue;
+            text.textContent = titleValue;
+            row.replaceChild(text, input);
+            text.style.opacity = 1;
+        };
+
+        input.addEventListener('blur', restoreText);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                restoreText();
+                input.blur();
+            }
+            if (e.key === 'Escape') row.replaceChild(text, input);
+        });
+
+        row.replaceChild(input, text);
+        input.focus();
+    });
+
         }
 
         if (action === "showserial") {
@@ -88,113 +149,115 @@ doneBtn.addEventListener('click', () => {
 
         row.appendChild(text);
         row.appendChild(icon);
-        mainBlock.appendChild(row);
+        main.appendChild(row);
 
         setTimeout(() => row.classList.add('show'), 30);
+
         return row;
     }
+
 
     const serialMasked = fullSerial.slice(0, 4) + "-****";
     const serialRow = createRow(serialMasked, "openeye.png", "showserial");
     const nameRow = createRow(titleValue, "pen.png", "edit");
 
+
     const balanceText = document.createElement('p');
     balanceText.classList.add('balance-text');
     balanceText.textContent = balanceValue + ",00₽";
-    mainBlock.appendChild(balanceText);
+    main.appendChild(balanceText);
+
     setTimeout(() => balanceText.classList.add('show'), 30);
+    
+    
+balanceText.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = "text";
+    input.inputMode = "numeric";
+    input.pattern = "[0-9]*";
+    input.classList.add('editInput');
+    input.value = balanceValue;
 
-    // Редактирование баланса
-    balanceText.addEventListener('click', () => {
-        if (mainBlock.querySelector('input')) return;
+    balanceText.style.opacity = 0.5;
 
-        const input = document.createElement('input');
-        input.type = "tel";
-        input.classList.add('editInput');
-        input.value = balanceValue;
-        balanceText.style.opacity = 0.5;
+    // скроллим к полю
+    setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
 
-        const restore = () => {
-            const newBalance = input.value ? Number(input.value) : balanceValue;
-            balanceValue = newBalance;
-            balanceText.textContent = newBalance + ",00₽";
-            mainBlock.replaceChild(balanceText, input);
-            balanceText.style.opacity = 1;
-            tempBalance = newBalance;
-        };
-
-        input.addEventListener('blur', restore);
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); restore(); input.blur(); }
-            if (e.key === 'Escape') mainBlock.replaceChild(balanceText, input);
-        });
-
-        mainBlock.replaceChild(input, balanceText);
-        input.focus();
-        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        tempBalance = input.value ? Number(input.value) : null;
     });
 
-    // Кнопка сохранения изменений
+    const restoreBalanceText = () => {
+        const newBalance = input.value ? Number(input.value) : balanceValue;
+        balanceValue = newBalance;
+        balanceText.textContent = newBalance + ",00₽";
+        main.replaceChild(balanceText, input);
+        balanceText.style.opacity = 1;
+        tempBalance = newBalance;
+    };
+
+    input.addEventListener('blur', restoreBalanceText);
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            restoreBalanceText();
+            input.blur();
+        }
+        if (e.key === 'Escape') main.replaceChild(balanceText, input);
+    });
+
+    main.replaceChild(input, balanceText);
+    input.focus();
+});
+
+
+
     const bottomBtn = document.createElement('button');
     bottomBtn.textContent = "Применить изменения";
     bottomBtn.classList.add('glass-button1');
     container.appendChild(bottomBtn);
+
     setTimeout(() => bottomBtn.classList.add('show'), 30);
 
     bottomBtn.addEventListener('click', () => {
-        if (tempBalance !== null) {
-            const newBalance = tempBalance;
-            const diff = newBalance - previousBalance;
 
-            balanceValue = newBalance;
-            previousBalance = newBalance;
-            balanceText.textContent = balanceValue + ",00₽";
 
-            if (diff < 0) totalMinus += Math.abs(diff);
-            else if (diff > 0) totalPlus += diff;
+    // ======= Сохранение баланса =======
+    if (tempBalance !== null) {
+        const newBalance = tempBalance;
+        const diff = newBalance - previousBalance;
 
-            document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
-            document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
-            tempBalance = null;
+        balanceValue = newBalance;
+        previousBalance = newBalance;
+
+        balanceText.textContent = balanceValue + ",00₽";
+
+        // Накопление пополнений / трат
+        if (diff < 0) {
+            totalMinus += Math.abs(diff);
+        } else if (diff > 0) {
+            totalPlus += diff;
         }
 
-        console.log("СОХРАНЕНО:", {
-            name: titleValue,
-            balance: balanceValue,
-            plus: totalPlus,
-            minus: totalMinus
-        });
+        // ======= Обновляем UI =======
+        document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
+        document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
+
+        // Сбрасываем временное значение
+        tempBalance = null;
+    }
+
+    console.log("СОХРАНЕНО:", {
+        name: titleValue,
+        balance: balanceValue,
+        plus: totalPlus,
+        minus: totalMinus
     });
 });
+});
 
-// Общая функция для редактирования текста
-function makeEditable(row, text, getValue, setValue) {
-    row.addEventListener('click', () => {
-        if (row.querySelector('input')) return;
 
-        const input = document.createElement('input');
-        input.type = "text";
-        input.classList.add('editInput');
-        input.value = getValue();
-        text.style.opacity = 0.5;
 
-        const restore = () => {
-            const val = input.value || getValue();
-            setValue(val);
-            text.textContent = val;
-            row.replaceChild(text, input);
-            text.style.opacity = 1;
-        };
-
-        input.addEventListener('blur', restore);
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); restore(); input.blur(); }
-            if (e.key === 'Escape') { row.replaceChild(text, input); text.style.opacity = 1; }
-        });
-
-        row.replaceChild(input, text);
-        input.focus();
-        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-}
 
