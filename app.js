@@ -5,6 +5,7 @@ const mainBlock = document.querySelector('.glass-container.main');
 
 
 
+
 if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
@@ -23,7 +24,8 @@ if (window.Telegram && window.Telegram.WebApp) {
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
-});
+
+
 textarea.addEventListener('input', (e) => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
@@ -176,9 +178,15 @@ doneBtn.addEventListener('click', () => {
 
         input.addEventListener('blur', restoreBalanceText);
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') restoreBalanceText();
-            if (e.key === 'Escape') main.replaceChild(balanceText, input);
-        });
+        if (e.key === 'Enter') {
+            e.preventDefault();       // не отправлять форму
+            restoreBalanceText();     // сохраняем значение
+            input.blur();             // снимаем фокус, клавиатура убирается
+        }
+        if (e.key === 'Escape') {
+            main.replaceChild(balanceText, input); // отмена
+        }
+    });
 
         main.replaceChild(input, balanceText);
         input.focus();
@@ -228,10 +236,3 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
-
-
-
-
-
-
-
