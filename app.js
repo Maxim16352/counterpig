@@ -4,13 +4,13 @@ const container = document.querySelector('.container');
 const mainBlock = document.querySelector('.glass-container.main');
 
 
-
-const tg = window.Telegram.WebApp;
-
-if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    const user = tg.initDataUnsafe.user;
-    const username = user.first_name + (user.last_name ? " " + user.last_name : "");
-    document.querySelector('.nameUser').textContent = username;
+if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const user = tg.initDataUnsafe.user;
+        const username = user.first_name + (user.last_name ? " " + user.last_name : "");
+        document.querySelector('.nameUser').textContent = username;
+    }
 }
 
 
@@ -218,3 +218,4 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
