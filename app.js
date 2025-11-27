@@ -6,13 +6,16 @@ const mainBlock = document.querySelector('.glass-container.main');
 
 if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const user = tg.initDataUnsafe.user;
+    const user = window.Telegram.WebApp.initDataUnsafe.user;
+
+    if (user) {
         const username = user.first_name + (user.last_name ? " " + user.last_name : "");
         document.querySelector('.nameUser').textContent = username;
+    } else {
+        document.querySelector('.nameUser').textContent = "Гость"; // если данных нет
     }
+    tg.expand();
 }
-
 
 textarea.addEventListener('input', (e) => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
@@ -218,4 +221,5 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
