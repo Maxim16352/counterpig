@@ -98,39 +98,45 @@ doneBtn.addEventListener('click', () => {
 
         if (action === "edit") {
             icon.addEventListener('click', () => {
-    const text = row.querySelector('.rowText');
-        if (row.querySelector('input')) return;
+            const text = row.querySelector('.rowText');
+            if (row.querySelector('input')) return;
 
-        const input = document.createElement('input');
-        input.type = "text";
-        input.classList.add('editInput');
-        input.value = text.textContent;
+            const input = document.createElement('input');
+            input.type = "text";
+            input.classList.add('editInput');
+            input.value = text.textContent;
 
-        // показываем, что редактируем
-        text.style.opacity = 0.5;
+            // показываем, что редактируем
+            text.style.opacity = 0.5;
 
-        // скроллим к полю
-        setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+            // скроллим к полю
+            setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+                 input.addEventListener('focus', () => {
+                main.style.transform = 'translateY(60px)'; // поднимаем блок
+                main.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            const restoreText = () => {
+                titleValue = input.value || titleValue;
+                text.textContent = titleValue;
+                row.replaceChild(text, input);
 
-        const restoreText = () => {
-            titleValue = input.value || titleValue;
-            text.textContent = titleValue;
-            row.replaceChild(text, input);
-            text.style.opacity = 1;
-        };
+                // возвращаем блок на место
+                main.style.transform = 'translateY(234px)';
+                text.style.opacity = 1;
+            };
 
-        input.addEventListener('blur', restoreText);
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                restoreText();
-                input.blur();
-            }
-            if (e.key === 'Escape') row.replaceChild(text, input);
-        });
+            input.addEventListener('blur', restoreText);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    restoreText();
+                    input.blur();
+                }
+                if (e.key === 'Escape') row.replaceChild(text, input);
+            });
 
-        row.replaceChild(input, text);
-        input.focus();
+            row.replaceChild(input, text);
+            input.focus();
     });
 
         }
@@ -179,7 +185,8 @@ balanceText.addEventListener('click', () => {
     input.value = balanceValue;
 
     balanceText.style.opacity = 0.5;
-
+    main.style.transform = 'translateY(70px)'; // небольшое поднятие
+    main.scrollIntoView({ behavior: 'smooth', block: 'center' });
     // скроллим к полю
     setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
 
@@ -189,10 +196,13 @@ balanceText.addEventListener('click', () => {
     });
 
     const restoreBalanceText = () => {
-        const newBalance = input.value ? Number(input.value) : balanceValue;
+         const newBalance = input.value ? Number(input.value) : balanceValue;
         balanceValue = newBalance;
         balanceText.textContent = newBalance + ",00₽";
         main.replaceChild(balanceText, input);
+
+        // возвращаем блок обратно
+        main.style.transform = 'translateY(234px)'; 
         balanceText.style.opacity = 1;
         tempBalance = newBalance;
     };
