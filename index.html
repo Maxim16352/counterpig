@@ -8,19 +8,40 @@
     <title>CounterApp</title>
 </head>
 <body>
-    <div class="container">
-        <div class="glass-container">
-            <h1 class="helloText">Добро пожаловать!</h1>
-            <img src="pepeMain.gif" alt="" width="125" height="125" class="pepe"> 
-            <div class="textarea-container">
-                <label class="textAreaLabel">Введите серийный номер копилки</label>
-                <input id="serial" type="text" class="glass-textarea" maxlength="9" inputmode="latin" pattern="[A-Z]*" placeholder="XXXX-XXXX" style="text-transform: uppercase;"/>
+   <div class="container">
+    <!-- Верхний блок -->
+    <div class="glass-container top">
+        <div class="glass-nameInfo">
+            <div class="infouser">
+                <p class="checkconnect">✅</p>
+                <p class="nameUser">undefined</p>
+                <img src="about.png" alt="" class="buttonInfo">
             </div>
-            <button class="glass-button">Готово</button>
-
+        </div>
+        <div class="glass-payment">
+            <div class="plusblock">
+                <p class="namePlus">Пополнения</p>
+                <p class="moneyPlus" id="plusmoney">+0₽</p>
+            </div>
+            <div class="minusblock">
+                <p class="nameMinus">Траты</p>
+                <p class="moneyMinus" id="minusmoney">-0₽</p>
+            </div>
         </div>
     </div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Основной блок -->
+    <div class="glass-container main">
+        <h1 class="helloText">Добро пожаловать!</h1>
+        <img src="pepeMain.gif" alt="" width="125" height="125" class="pepe"> 
+        <div class="textarea-container">
+            <label class="textAreaLabel">Введите серийный номер копилки</label>
+            <input id="serial" type="text" class="glass-textarea" maxlength="9" inputmode="latin" pattern="[A-Z]*" placeholder="XXXX-XXXX" style="text-transform: uppercase;"/>
+        </div>
+        <button class="glass-button" id="doneBtn">Готово</button>
+    </div>
+    </div>
     <script src="app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </body>
 </html>
