@@ -111,7 +111,7 @@ doneBtn.addEventListener('click', () => {
 
                 // поднимаем блок main при фокусе
                 input.addEventListener('focus', () => {
-                    main.style.transform = 'translateY(-70px)';
+                    main.style.transform = 'translateY(-60px)';
                 });
 
                 const restoreText = () => {
@@ -264,4 +264,5 @@ balanceText.addEventListener('click', () => {
     });
 });
 });
+
 
