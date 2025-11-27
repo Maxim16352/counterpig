@@ -34,7 +34,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
+    overflow: hidden;
     box-sizing: border-box;
     padding: 24px 16px;
     overflow-y: auto;
@@ -379,5 +379,6 @@ html, body {
     font-size: 20px;
     margin-top:5px;
 }
+
 
 
