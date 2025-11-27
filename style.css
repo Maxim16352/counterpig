@@ -1,4 +1,3 @@
-/* Базовая настройка */
 html, body {
     margin: 0;
     padding: 0;
@@ -8,62 +7,94 @@ html, body {
     background: #f2f2f2;
 }
 
-/* Контейнер тянется полностью */
-.glass-container {
+.container {
     position: relative;
-    width: calc(100% - 2px); /* слегка сужаем, чтобы края не обрезались */
-    height: calc(100vh - 45px);
-    margin: 45px auto 0 auto; /* центрируем и добавляем отступ сверху */
-    padding: 24px 16px;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
 
+.glass-container.main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    bottom: 0;
     border-radius: 28px 28px 0 0;
     background: rgba(255, 255, 255, 0.28);
     backdrop-filter: blur(22px) saturate(160%);
     -webkit-backdrop-filter: blur(22px) saturate(160%);
     border: 1px solid rgba(255,255,255,0.36);
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    box-sizing: border-box; /* чтобы padding не ломал ширину */
+    box-sizing: border-box;
+    padding: 24px 16px;
+    transition: transform 0.6s ease;
+    transform: translateY(45px);
 }
 
-/* Подключение шрифтов */
+.glass-container.top {
+    position: fixed;
+    flex-direction: column;
+    width: 100%;
+    height: 170px;
+    top: -100px;
+    left: 0;
+    border-radius: 0 0 20px 20px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.36);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.14);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    justify-content: space-between; /* Ð’ÐÐ–ÐÐž â€” Ñ€Ð°ÑÐ¿Ñ€ÐµÐ´ÐµÐ»ÑÐµÐ¼ nameInfo ÑÐ²ÐµÑ€Ñ…Ñƒ, payment ÑÐ½Ð¸Ð·Ñƒ */
+
+    padding: 15px 0; /* Ð½ÐµÐ¼Ð½Ð¾Ð³Ð¾ Ð¾Ñ‚ÑÑ‚ÑƒÐ¿Ð¾Ð² */
+    opacity: 0;
+    transition: top 0.6s ease, opacity 0.6s ease;
+    z-index: 999;
+}
+
+.container.active .glass-container.main {
+    transform: translateY(234px);
+}
+
+.container.active .glass-container.top {
+    top: 0;
+    opacity: 1;
+}
+
 @font-face {
     font-family: 'Fascinate';
     src: url('SFProText-Regular.ttf') format('truetype');
     font-display: swap;
 }
 @font-face {
+    font-family: 'Apple';
+    src: local('Apple Color Emoji'), local('AppleColorEmoji'), local('apple-color-emoji');
+    src:
+    url('AppleColorEmoji.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+@font-face {
     font-family: 'Fascinate1';
     src: url('SFProText-Bold.ttf') format('truetype');
     font-display: swap;
 }
-
-/* Основной блок */
-.glass-container {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 45px); /* оставляем место сверху */
-    margin-top: 45px; /* отступ сверху */
-    padding: 24px 16px;
-
-    border-radius: 28px 28px 0 0; /* скругление только сверху */
-    background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(22px) saturate(160%);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    border: 1px solid rgba(255,255,255,0.36);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
+@font-face {
+    font-family: 'fira';
+    src: url('FiraCode-Bold.ttf') format('truetype');
+    font-display: swap;
 }
 
-/* Заголовок */
 .helloText {
     font-family: 'Fascinate1', Arial, sans-serif;
     font-size: 24px;
@@ -72,7 +103,6 @@ html, body {
     text-align: center;
 }
 
-/* Гифка */
 .pepe {
     margin-top: 32px;
     max-width: 70%;
@@ -80,7 +110,7 @@ html, body {
     display: block;
 }
 
-/* Поле ввода */
+
 .textarea-container {
     width: 100%;
     max-width: 360px;
@@ -89,19 +119,20 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    opacity: 1;               
+    transition: opacity 1000ms ease;
 }
 
 .textAreaLabel {
     font-family: 'Fascinate1', Arial, sans-serif;
     font-size: 13px;
     color: #585858;
-
 }
 
 .glass-textarea {
     width: 310px;
     height: 44px;
-    resize: none; 
+    resize: none;
     padding: 10px 14px;
     font-size: 30px;
     line-height: 1.4;
@@ -116,19 +147,23 @@ html, body {
     outline: none;
     text-align: center;
     transition: 0.2s ease;
+    opacity: 1;               
+    transition: opacity 1000ms ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-textarea:focus, .glass-textarea:hover {
-    border-color: rgba(0,122,255,0.45); 
+    border-color: rgba(0,122,255,0.45);
     box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
 }
-
-/* Кнопка */
-.glass-button {
-    width: 100%;
+.glass-button1 {
+    position: absolute;
+    bottom: 30px; /* ÃÂ¾Ã‘â€šÃ‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ ÃÂ¾Ã‘â€š ÃÂ½ÃÂ¸ÃÂ¶ÃÂ½ÃÂµÃÂ³ÃÂ¾ ÃÂºÃ‘â‚¬ÃÂ°Ã‘Â Ã‘ÂÃÂºÃ‘â‚¬ÃÂ°ÃÂ½ÃÂ° */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* ÃÂ¸ÃÂ»ÃÂ¸ ÃÂºÃÂ¾ÃÂ½ÃÂºÃ‘â‚¬ÃÂµÃ‘â€šÃÂ½ÃÂ°Ã‘Â Ã‘Ë†ÃÂ¸Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ° */
     max-width: 329px;
     height: 64px;
-    margin-top: 200px;
     font-family: 'Fascinate1', Arial, sans-serif;
     font-size: 18px;
     color: #585858;
@@ -140,14 +175,53 @@ html, body {
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
     transition: all 0.25s ease;
+    opacity: 0;               
+    transition: opacity 1000ms ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-button {
+    position: absolute;
+    bottom: 150px; /* ÃÂ¾Ã‘â€šÃ‘ÂÃ‘â€šÃ‘Æ’ÃÂ¿ ÃÂ¾Ã‘â€š ÃÂ½ÃÂ¸ÃÂ¶ÃÂ½ÃÂµÃÂ³ÃÂ¾ ÃÂºÃ‘â‚¬ÃÂ°Ã‘Â Ã‘ÂÃÂºÃ‘â‚¬ÃÂ°ÃÂ½ÃÂ° */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%; /* ÃÂ¸ÃÂ»ÃÂ¸ ÃÂºÃÂ¾ÃÂ½ÃÂºÃ‘â‚¬ÃÂµÃ‘â€šÃÂ½ÃÂ°Ã‘Â Ã‘Ë†ÃÂ¸Ã‘â‚¬ÃÂ¸ÃÂ½ÃÂ° */
+    max-width: 329px;
+    height: 64px;
+    font-family: 'Fascinate1', Arial, sans-serif;
+    font-size: 18px;
+    color: #585858;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 34px;
+    cursor: pointer;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
+    transition: all 0.25s ease;
+    opacity: 1;               
+    transition: opacity 1000ms ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-button1.show {
+    opacity: 1;                /* fade-in */
+}
+.glass-button.hide {
+    opacity: 0;                /* fade-in */
 }
 
-.glass-button:active, .glass-button:hover {
-    border-color: rgba(0,122,255,0.45); 
+.glass-button:active,
+.glass-button:hover {
+    border-color: rgba(0,122,255,0.45);
     box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
 }
+.glass-button1:hover {
+    border-color: rgba(0,122,255,0.45);
+    box-shadow: inset 0 0 0 1px rgba(0,122,255,0.55), 0 6px 22px rgba(0,0,0,0.14);
+}
+.glass-button.up {
+    bottom: 50px;
+}
 
-/* 📱 Мобильная адаптация */
 @media (max-width: 480px) {
     .helloText {
         font-size: 24px;
@@ -164,24 +238,137 @@ html, body {
         font-size: 30px;
     }
 
-    .glass-button {
-        margin-top: 150px;
-        height: 66px;
-        font-size: 18px;
-    }
-
     .textAreaLabel {
         font-size: 13px;
     }
 
-    .glass-container {
+    .glass-container.main {
         padding: 20px 12px;
         border-radius: 28px 28px 0 0;
     }
 }
+.jem-image {
+    margin-top: 32px;
+    max-width: 70%;
+    height: 170px;
+    width: 170px;
+    display: block;
+    opacity: 0;                
+    transition: opacity 1000ms ease;
+}
 
+.jem-image.show {
+    opacity: 1;                
+}
+.rowBlock {
+    margin: 0 auto -30px; /* Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â²ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã¢â‚¬Â¦Ãƒâ€˜Ã†â€™ 0, ÃƒÂÃ‚Â¿ÃƒÂÃ‚Â¾ ÃƒÂÃ‚Â±ÃƒÂÃ‚Â¾ÃƒÂÃ‚ÂºÃƒÂÃ‚Â°ÃƒÂÃ‚Â¼ auto, Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â·Ãƒâ€˜Ã†â€™ 25px */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    opacity: 0;               
+    transition: opacity 1000ms ease;
+}
+.rowBlock.show {
+    opacity: 1;                
+}
 
+.rowText {
+    font-family: 'Fascinate1', Arial, sans-serif;
+    font-size: 20px;
+    color: #585858;
+}
+.balance-text{
+    margin-top: 20px ;
+    font-family: 'fira', Arial, sans-serif;
+    font-size: 40px;
+    color: #585858;
+    opacity: 0;                /* Ã‘ÂÃ‘â€šÃÂ°Ã‘â‚¬Ã‘â€š */
+    transition: opacity 1000ms ease;
+}
+.balance-text.show {
+    opacity: 1;                /* fade-in */
+}
+.editInput {
+    padding: 6px 10px;
+    font-size: 18px;
+    border-radius: 12px;
+    margin-top:20px;
+    margin-bottom:20px;
+    border: 1px solid #aaa;
+    outline: none;
+    width: 180px;
+    background: rgba(255,255,255,0.45);
+}
+.glass-nameInfo {
+    width: 80%;
+    height: 40px;
 
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 34px;
+    backdrop-filter: blur(18px) saturate(160%);
 
-
-
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Ñ†ÐµÐ½Ñ‚Ñ€Ð¸Ñ€ÑƒÐµÐ¼ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð±Ð»Ð¾Ðº */
+}
+.nameUser{
+    font-family: 'Fascinate1', Arial, sans-serif;
+    font-size: 16px;
+    color: #585858;
+    flex: 1;
+    text-align:center;
+}
+.checkconnect{
+    font-family: 'Apple', Arial, sans-serif;
+    font-size: 20px;
+    color: #585858;
+}
+.buttonInfo{
+    width:25px;
+    height:25;
+}
+.infouser {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* â† Ð›Ð•Ð’Ðž, Ð¦Ð•ÐÐ¢Ð , ÐŸÐ ÐÐ’Ðž */
+    align-items: center;
+}
+.plusblock,
+.minusblock {
+    width: 45%;
+    height: 90px;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 34px;
+    backdrop-filter: blur(18px) saturate(160%);
+}
+.glass-payment {
+    width: 85%;               /* Ñ‚Ð°ÐºÐ°Ñ Ð¶Ðµ ÑˆÐ¸Ñ€Ð¸Ð½Ð°, ÐºÐ°Ðº Ð¸ nameInfo */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.namePlus,
+.nameMinus{
+    text-align: center;
+    font-family: 'Fascinate1', Arial, sans-serif;
+    color: #585858;
+    font-size: 16px;
+}
+.moneyPlus{
+    text-align: center;
+    font-family: 'Fascinate1', Arial, sans-serif;
+    color: #438D39;
+    font-size: 20px;
+    margin-top:5px;
+}
+.moneyMinus{
+    text-align: center;
+    font-family: 'Fascinate1', Arial, sans-serif;
+    color: #8D3939;
+    font-size: 20px;
+    margin-top:5px;
+}
