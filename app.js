@@ -11,6 +11,14 @@ function ensureVisible(el) {
     setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
     setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 500);
 }
+function restorePosition(el) {
+    // Ждём, пока DOM обновится после replaceChild
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+    });
+}
 
 /*------------------------------------------------------------------
   TELEGRAM NAME
@@ -129,9 +137,7 @@ doneBtn.addEventListener('click', () => {
                     row.replaceChild(text, input);
                     text.style.opacity = 1;
 
-                    setTimeout(() => {
-                        row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                    }, 120);
+                    restorePosition(row);
                 };
 
                 input.addEventListener('blur', restoreText);
@@ -223,9 +229,7 @@ doneBtn.addEventListener('click', () => {
             main.replaceChild(balanceText, input);
             balanceText.style.opacity = 1;
 
-            setTimeout(() => {
-                balanceText.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }, 120);
+            restorePosition(balanceText);
         };
 
         input.addEventListener('blur', restoreBalance);
@@ -283,3 +287,4 @@ doneBtn.addEventListener('click', () => {
         });
     });
 });
+
