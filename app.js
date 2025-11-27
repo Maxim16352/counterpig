@@ -112,7 +112,7 @@ doneBtn.addEventListener('click', () => {
             // скроллим к полю
             setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
                  input.addEventListener('focus', () => {
-                main.style.transform = 'translateY(-10px)'; // поднимаем блок
+                
                 main.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
             const restoreText = () => {
@@ -121,7 +121,7 @@ doneBtn.addEventListener('click', () => {
                 row.replaceChild(text, input);
 
                 // возвращаем блок на место
-                main.style.transform = 'translateY(234px)';
+                
                 text.style.opacity = 1;
             };
 
@@ -185,7 +185,7 @@ balanceText.addEventListener('click', () => {
     input.value = balanceValue;
 
     balanceText.style.opacity = 0.5;
-    main.style.transform = 'translateY(-30px)'; // небольшое поднятие
+    
     main.scrollIntoView({ behavior: 'smooth', block: 'center' });
     // скроллим к полю
     setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
@@ -202,7 +202,7 @@ balanceText.addEventListener('click', () => {
         main.replaceChild(balanceText, input);
 
         // возвращаем блок обратно
-        main.style.transform = 'translateY(234px)'; 
+        
         balanceText.style.opacity = 1;
         tempBalance = newBalance;
     };
@@ -267,6 +267,7 @@ balanceText.addEventListener('click', () => {
     });
 });
 });
+
 
 
 
