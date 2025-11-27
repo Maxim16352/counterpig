@@ -6,24 +6,22 @@ const mainBlock = document.querySelector('.glass-container.main');
 
 
 
-if (window.Telegram && window.Telegram.WebApp) {
+document.addEventListener("DOMContentLoaded", () => {
+    // Telegram WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // полноэкранно
 
-        // Разворачиваем Web App на весь экран
-        tg.expand();
-
-        // Получаем информацию о пользователе
+        // Имя пользователя
         const user = tg.initDataUnsafe?.user;
-
-        if (user) {
-            const username = user.first_name + (user.last_name ? " " + user.last_name : "");
-            document.querySelector('.nameUser').textContent = username;
-        } else {
-            document.querySelector('.nameUser').textContent = "Гость";
-        }
+        document.querySelector('.nameUser').textContent = user 
+            ? user.first_name + (user.last_name ? " " + user.last_name : "")
+            : "Гость";
     } else {
         document.querySelector('.nameUser').textContent = "Гость";
     }
+});
 
 
 textarea.addEventListener('input', (e) => {
@@ -113,7 +111,7 @@ doneBtn.addEventListener('click', () => {
 
                 // поднимаем блок main при фокусе
                 input.addEventListener('focus', () => {
-                    main.style.transform = 'translateY(-80px)';
+                    main.style.transform = 'translateY(-70px)';
                 });
 
                 const restoreText = () => {
