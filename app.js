@@ -112,7 +112,7 @@ doneBtn.addEventListener('click', () => {
             // скроллим к полю
             setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
                  input.addEventListener('focus', () => {
-                main.style.transform = 'translateY(60px)'; // поднимаем блок
+                main.style.transform = 'translateY(-10px)'; // поднимаем блок
                 main.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
             const restoreText = () => {
@@ -185,7 +185,7 @@ balanceText.addEventListener('click', () => {
     input.value = balanceValue;
 
     balanceText.style.opacity = 0.5;
-    main.style.transform = 'translateY(70px)'; // небольшое поднятие
+    main.style.transform = 'translateY(-30px)'; // небольшое поднятие
     main.scrollIntoView({ behavior: 'smooth', block: 'center' });
     // скроллим к полю
     setTimeout(() => input.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
