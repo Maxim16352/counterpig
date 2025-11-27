@@ -20,7 +20,6 @@ if (window.Telegram && window.Telegram.WebApp) {
             document.querySelector('.nameUser').textContent = "Гость";
         }
     } else {
-        // Если открыт напрямую в браузере
         document.querySelector('.nameUser').textContent = "Гость";
     }
 
@@ -228,6 +227,7 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
 
 
 
