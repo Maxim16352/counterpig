@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Форматирование серийного номера
+// Форматирование серийного номер
 textarea.addEventListener('input', () => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
@@ -197,3 +197,4 @@ function makeEditable(row, text, getValue, setValue) {
         input.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 }
+
