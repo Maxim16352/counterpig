@@ -109,7 +109,7 @@ doneBtn.addEventListener('click', () => {
                 // показываем, что редактируем
                 text.style.opacity = 0.5;
 
-                // поднимаем блок main при фокусе
+                // поднимаем блок main при фокус
                 input.addEventListener('focus', () => {
                     main.style.transform = 'translateY(-60px)';
                 });
@@ -264,5 +264,6 @@ balanceText.addEventListener('click', () => {
     });
 });
 });
+
 
 
