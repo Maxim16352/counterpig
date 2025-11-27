@@ -12,7 +12,6 @@ if (window.Telegram && window.Telegram.WebApp) {
         // Разворачиваем Web App на весь экран
         tg.expand();
 
-        // Получаем информацию о пользователе
         const user = tg.initDataUnsafe?.user;
 
         if (user) {
@@ -236,3 +235,4 @@ doneBtn.addEventListener('click', () => {
     });
 });
 });
+
