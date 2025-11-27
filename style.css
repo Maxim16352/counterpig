@@ -37,8 +37,9 @@ html, body {
     overflow-y: auto;
     box-sizing: border-box;
     padding: 24px 16px;
+    overflow-y: auto;
     transition: transform 0.6s ease;
-    transform: translateY(45px);
+    transform: translateY(45px); /* стартовая позиция */
 }
 
 .glass-container.top {
@@ -81,6 +82,14 @@ html, body {
     src: url('SFProText-Regular.ttf') format('truetype');
     font-display: swap;
 }
+@font-face {
+    font-family: 'Apple';
+    src: local('Apple Color Emoji'), local('AppleColorEmoji'), local('apple-color-emoji');
+    src:
+    url('.AppleColorEmojiUI.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
 @font-face {
     font-family: 'Fascinate1';
     src: url('SFProText-Bold.ttf') format('truetype');
@@ -370,5 +379,3 @@ html, body {
     font-size: 20px;
     margin-top:5px;
 }
-
-
