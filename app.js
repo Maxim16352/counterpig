@@ -251,7 +251,6 @@ doneBtn.addEventListener('click', () => {
         const input = document.createElement("input");
         input.classList.add("editInput");
         input.type = "text";
-        input.inputMode = "numeric";
         input.pattern = "[0-9]*";
         input.value = balanceValue;
         input.setAttribute("enterkeyhint", "done"); 
@@ -330,3 +329,4 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
