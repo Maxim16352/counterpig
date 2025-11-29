@@ -175,8 +175,9 @@ doneBtn.addEventListener('click', () => {
                 input.type = "text";
                 input.value = text.textContent;
                 input.setAttribute("enterkeyhint", "done");
-                bottomBtn.style.transition = "bottom 0.3s ease";
-                bottomBtn.style.bottom = "-50px";
+                bottomBtn.style.opacity = "0";
+                bottomBtn.style.pointerEvents = "none"; // не кликабельна
+                bottomBtn.style.bottom = "-150px";      // уезжает вниз
 
                 text.style.opacity = 0.4;
                 row.replaceChild(input, text);
@@ -195,7 +196,9 @@ doneBtn.addEventListener('click', () => {
                     showTop();
                     moveMainDown();
                     setTimeout(() => {
-                        bottomBtn.style.bottom = "20px";
+                        bottomBtn.style.opacity = "1";
+                        bottomBtn.style.pointerEvents = "auto"; // не кликабельна
+                        bottomBtn.style.bottom = "20px"; 
                     }, 100);
                 };
 
@@ -251,6 +254,7 @@ doneBtn.addEventListener('click', () => {
         input.inputMode = "numeric";
         input.pattern = "[0-9]*";
         input.value = balanceValue;
+        input.setAttribute("enterkeyhint", "done"); 
 
         balanceText.style.opacity = 0.4;
         main.replaceChild(input, balanceText);
@@ -259,8 +263,9 @@ doneBtn.addEventListener('click', () => {
         moveMainUp();
 
         // Убираем кнопку вниз при фокусе
-        bottomBtn.style.transition = "bottom 0.3s ease";
-        bottomBtn.style.bottom = "-50px";
+        bottomBtn.style.opacity = "0";
+        bottomBtn.style.pointerEvents = "none"; // не кликабельна
+        bottomBtn.style.bottom = "-150px"; 
 
         let finished = false; // защита от двойного выполнения
 
@@ -281,7 +286,9 @@ doneBtn.addEventListener('click', () => {
 
             // Возвращаем кнопку
             setTimeout(() => {
-                bottomBtn.style.bottom = "20px";
+                bottomBtn.style.opacity = "1";
+                bottomBtn.style.pointerEvents = "auto"; // не кликабельна
+                bottomBtn.style.bottom = "20px"; 
             }, 100);
         };
 
