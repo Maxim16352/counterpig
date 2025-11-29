@@ -37,7 +37,7 @@ html, body {
     -webkit-scrollbar { display: none; }
     box-sizing: border-box;
     padding: 24px 16px;
-    transition: transform 0.3s ease, bottom 0.6s ease;
+    transition: transform 0.6s ease, bottom 0.6s ease;
 }
 
 .glass-container.top {
@@ -381,3 +381,4 @@ html, body {
     font-size: 20px;
     margin-top:5px;
 }
+
