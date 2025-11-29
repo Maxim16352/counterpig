@@ -294,7 +294,7 @@ doneBtn.addEventListener('click', () => {
 
         input.addEventListener("blur", finishBalance);
         input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" || e.key === ".") {
                 e.preventDefault();
                 finishBalance();
                 input.blur(); // безопасно, finishBalance уже сработал
@@ -330,6 +330,7 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
 
