@@ -106,7 +106,7 @@ textarea.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { 
         e.preventDefault(); 
         textarea.blur(); 
-        doneBtn.style.bottom = "150px"; 
+        doneBtn.style.bottom = "30px"; 
 } });
 /* -----------------------------------------------------
    Маска для серийного номера
@@ -330,6 +330,7 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
 
