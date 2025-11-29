@@ -18,7 +18,7 @@ if (window.visualViewport) {
     /* --- главный триггер Telegram / iOS клавиатуры --- */
     vv.addEventListener("resize", () => {
         const keyboardLikelyOpen =
-            vv.height < window.innerHeight - 120 ||
+            vv.height < window.innerHeight - 3000 ||
             vv.offsetTop > 0;
 
         if (keyboardLikelyOpen) {
@@ -35,7 +35,6 @@ if (window.visualViewport) {
         }
     });
 
-    /* --- резервный триггер Telegram, срабатывает при закрытии клавиатуры --- */
     vv.addEventListener("scroll", () => {
         if (!keyboardIsOpen && waitingForViewportRestore) {
             setTimeout(() => {
@@ -50,7 +49,7 @@ if (window.visualViewport) {
 function restoreMainTransform() {
     if (!mainBlock) return;
 
-    mainBlock.style.transform = ""; // убираем смещения
+    mainBlock.style.transform = ""; 
 
     const active = document.activeElement;
     if (active) ensureVisibleInsideMain(active);
@@ -107,18 +106,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* -----------------------------------------------------
-   Маска для серийного номера
--------------------------------------------------------*/
+textarea.addEventListener("focus", () => {
+    doneBtn.style.bottom = "0px";
+});
+textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        textarea.blur();
+        doneBtn.style.bottom = "150px";
+    }
+});
 textarea.addEventListener('input', () => {
+
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
+    textarea.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                textarea.blur();
+            }
+        });
     if (value.length > 8) value = value.slice(0, 8);
     textarea.value = value.length > 4 ? value.slice(0, 4) + "-" + value.slice(4) : value;
 });
 
-/* -----------------------------------------------------
-   Основная логика (кнопка "Готово")
--------------------------------------------------------*/
+
 doneBtn.addEventListener('click', () => {
     const fullSerial = textarea.value.trim();
     if (!fullSerial || fullSerial.length !== 9) {
@@ -126,7 +136,6 @@ doneBtn.addEventListener('click', () => {
         return;
     }
 
-    /* Удаляем стартовое */
     doneBtn.classList.add('hide');
     container.classList.add('active');
     document.querySelector('.helloText')?.remove();
@@ -136,14 +145,12 @@ doneBtn.addEventListener('click', () => {
 
     const main = mainBlock;
 
-    /* GIF */
     const img = document.createElement('img');
     img.src = "CounterMenu.gif";
     img.classList.add('jem-image');
     main.appendChild(img);
     setTimeout(() => img.classList.add('show'), 20);
 
-    /* Состояния */
     let titleValue = "Моя копилка";
     let balanceValue = 0;
     let previousBalance = 0;
@@ -152,7 +159,6 @@ doneBtn.addEventListener('click', () => {
     let totalPlus = 0;
     let totalMinus = 0;
 
-    /* ------------------- Создание строки ------------------- */
     function createRow(textValue, imgSrc, action) {
         const row = document.createElement('div');
         row.classList.add('rowBlock');
@@ -165,7 +171,6 @@ doneBtn.addEventListener('click', () => {
         icon.classList.add('rowIcon');
         icon.src = imgSrc;
 
-        /* РЕДАКТИРОВАТЬ НАЗВАНИЕ */
         if (action === "edit") {
             icon.addEventListener('click', () => {
                 if (row.querySelector('input')) return;
@@ -183,11 +188,10 @@ doneBtn.addEventListener('click', () => {
 
                 input.focus();
                 ensureVisibleInsideMain(input);
-
                 input.addEventListener('input', () => {
                     tempTitle = input.value;
                 });
-
+                
                 const finishEdit = () => {
                     titleValue = tempTitle ?? input.value;
                     text.textContent = titleValue;
@@ -196,10 +200,9 @@ doneBtn.addEventListener('click', () => {
                     text.style.opacity = 1;
                     showTop();
 
-                    /* резервное восстановление */
                     setTimeout(() => {
                         if (!keyboardIsOpen) restoreMainTransform();
-                    }, 50);
+                    }, 500);
 
                     if (keyboardIsOpen) waitingForViewportRestore = true;
                 };
@@ -216,7 +219,6 @@ doneBtn.addEventListener('click', () => {
             });
         }
 
-        /* ПОКАЗАТЬ/СКРЫТЬ СЕРИЙНИК */
         if (action === "showserial") {
             icon.addEventListener("click", () => {
                 if (text.dataset.shown === "true") {
@@ -258,6 +260,7 @@ doneBtn.addEventListener('click', () => {
         input.type = "text";
         input.inputMode = "numeric";
         input.pattern = "[0-9]*";
+        input.setAttribute("enterkeyhint", "done");
         input.value = balanceValue;
 
         input.setAttribute("enterkeyhint", "done");
