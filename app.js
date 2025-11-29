@@ -15,8 +15,13 @@ let waitingForViewportRestore = false;
 if (window.visualViewport) {
     const vv = window.visualViewport;
 
+    /* --- главный триггер Telegram / iOS клавиатуры --- */
     vv.addEventListener("resize", () => {
-        if (vv.height < window.innerHeight - 100) {
+        const keyboardLikelyOpen =
+            vv.height < window.innerHeight - 120 ||
+            vv.offsetTop > 0;
+
+        if (keyboardLikelyOpen) {
             keyboardIsOpen = true;
         } else {
             keyboardIsOpen = false;
@@ -29,15 +34,26 @@ if (window.visualViewport) {
             }
         }
     });
+
+    /* --- резервный триггер Telegram, срабатывает при закрытии клавиатуры --- */
+    vv.addEventListener("scroll", () => {
+        if (!keyboardIsOpen && waitingForViewportRestore) {
+            setTimeout(() => {
+                restoreMainTransform();
+                waitingForViewportRestore = false;
+            }, 80);
+        }
+    });
 }
 
 /* ВОССТАНОВЛЕНИЕ ПОЗИЦИИ main */
 function restoreMainTransform() {
-    const active = document.activeElement;
-    if (!active || !mainBlock) return;
+    if (!mainBlock) return;
 
     mainBlock.style.transform = ""; // убираем смещения
-    ensureVisibleInsideMain(active);
+
+    const active = document.activeElement;
+    if (active) ensureVisibleInsideMain(active);
 }
 
 /* -----------------------------------------------------
@@ -71,6 +87,7 @@ function ensureVisibleInsideMain(el) {
 function hideTop() {
     document.querySelector('.glass-container.top')?.classList.add('edit-away');
 }
+
 function showTop() {
     document.querySelector('.glass-container.top')?.classList.remove('edit-away');
 }
@@ -130,10 +147,8 @@ doneBtn.addEventListener('click', () => {
     let titleValue = "Моя копилка";
     let balanceValue = 0;
     let previousBalance = 0;
-
     let tempBalance = null;
     let tempTitle = null;
-
     let totalPlus = 0;
     let totalMinus = 0;
 
@@ -161,7 +176,6 @@ doneBtn.addEventListener('click', () => {
                 input.classList.add('editInput');
                 input.type = "text";
                 input.value = text.textContent;
-
                 input.setAttribute("enterkeyhint", "done");
 
                 text.style.opacity = 0.4;
@@ -180,11 +194,14 @@ doneBtn.addEventListener('click', () => {
 
                     row.replaceChild(text, input);
                     text.style.opacity = 1;
-
                     showTop();
 
-                    if (!keyboardIsOpen) restoreMainTransform();
-                    else waitingForViewportRestore = true;
+                    /* резервное восстановление */
+                    setTimeout(() => {
+                        if (!keyboardIsOpen) restoreMainTransform();
+                    }, 50);
+
+                    if (keyboardIsOpen) waitingForViewportRestore = true;
                 };
 
                 input.addEventListener("blur", finishEdit);
@@ -246,7 +263,6 @@ doneBtn.addEventListener('click', () => {
         input.setAttribute("enterkeyhint", "done");
 
         balanceText.style.opacity = 0.4;
-
         main.replaceChild(input, balanceText);
         input.focus();
 
@@ -265,11 +281,13 @@ doneBtn.addEventListener('click', () => {
             balanceText.style.opacity = 1;
 
             main.replaceChild(balanceText, input);
-
             showTop();
 
-            if (!keyboardIsOpen) restoreMainTransform();
-            else waitingForViewportRestore = true;
+            setTimeout(() => {
+                if (!keyboardIsOpen) restoreMainTransform();
+            }, 50);
+
+            if (keyboardIsOpen) waitingForViewportRestore = true;
         };
 
         input.addEventListener("blur", finishBalance);
