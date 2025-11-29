@@ -253,7 +253,9 @@ doneBtn.addEventListener('click', () => {
         input.type = "text";
         input.pattern = "[0-9]*";
         input.value = balanceValue;
-        input.setAttribute("enterkeyhint", "done"); 
+        input.setAttribute("enterkeyhint", "done");
+        input.autocomplete = "off";
+        input.autocorrect = "off";
 
         balanceText.style.opacity = 0.4;
         main.replaceChild(input, balanceText);
@@ -329,4 +331,5 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
