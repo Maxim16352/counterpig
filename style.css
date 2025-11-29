@@ -76,6 +76,12 @@ html, body {
     top: 0;
     opacity: 1;
 }
+/* Верхний блок уезжает вверх при редактировании */
+.glass-container.top.away {
+    top:-100px;
+    opacity: 0;
+    pointer-events: none;
+}
 
 @font-face {
     font-family: 'Fascinate';
@@ -379,5 +385,6 @@ html, body {
     font-size: 20px;
     margin-top:5px;
 }
+
 
 
