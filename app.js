@@ -250,8 +250,9 @@ doneBtn.addEventListener('click', () => {
 
         const input = document.createElement("input");
         input.classList.add("editInput");
-        input.type = "number";
-        input.inputMode = "tel";
+        input.type = "text";                  // ← обязательно text
+        input.inputMode = "numeric";          // ← цифровая клавиатура 0–9
+        input.setAttribute("enterkeyhint", "done")
         input.value = balanceValue;
         input.setAttribute("enterkeyhint", "done");
 
@@ -329,6 +330,7 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
 
