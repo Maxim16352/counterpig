@@ -78,7 +78,7 @@ html, body {
 }
 /* Верхний блок уезжает вверх при редактировании */
 .glass-container.top.away {
-    top:-100px;
+    top:-180px;
     opacity: 0;
     pointer-events: none;
 }
@@ -385,6 +385,7 @@ html, body {
     font-size: 20px;
     margin-top:5px;
 }
+
 
 
 
