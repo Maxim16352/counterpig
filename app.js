@@ -1,5 +1,5 @@
 /* ============================
-   app.js — рабочая версия
+   app.js — основной код
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -330,6 +330,7 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
 
