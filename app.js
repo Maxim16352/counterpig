@@ -152,7 +152,6 @@ doneBtn.addEventListener('click', () => {
     let totalPlus = 0;
     let totalMinus = 0;
 
-    /* ------------------- Создание строки ------------------- */
     function createRow(textValue, imgSrc, action) {
         const row = document.createElement('div');
         row.classList.add('rowBlock');
@@ -176,6 +175,8 @@ doneBtn.addEventListener('click', () => {
                 input.type = "text";
                 input.value = text.textContent;
                 input.setAttribute("enterkeyhint", "done");
+                bottomBtn.style.transition = "bottom 0.3s ease";
+                bottomBtn.style.bottom = "-50px";
 
                 text.style.opacity = 0.4;
                 row.replaceChild(input, text);
@@ -193,6 +194,9 @@ doneBtn.addEventListener('click', () => {
                     text.style.opacity = 1;
                     showTop();
                     moveMainDown();
+                    setTimeout(() => {
+                        bottomBtn.style.bottom = "20px";
+                    }, 100);
                 };
 
                 input.addEventListener("blur", finishEdit);
@@ -206,7 +210,6 @@ doneBtn.addEventListener('click', () => {
             });
         }
 
-        /* ПОКАЗАТЬ/СКРЫТЬ СЕРИЙНИК */
         if (action === "showserial") {
             icon.addEventListener("click", () => {
                 if (text.dataset.shown === "true") {
@@ -241,12 +244,12 @@ doneBtn.addEventListener('click', () => {
         if (main.querySelector("input")) return;
 
         hideTop();
+
         const input = document.createElement("input");
         input.classList.add("editInput");
         input.type = "text";
         input.inputMode = "numeric";
         input.pattern = "[0-9]*";
-        input.setAttribute("enterkeyhint", "done");
         input.value = balanceValue;
 
         balanceText.style.opacity = 0.4;
@@ -255,21 +258,31 @@ doneBtn.addEventListener('click', () => {
 
         moveMainUp();
 
-        input.addEventListener("input", () => {
-            input.value = input.value.replace(/[^0-9]/g, "");
-            tempBalance = input.value ? Number(input.value) : null;
-        });
+        // Убираем кнопку вниз при фокусе
+        bottomBtn.style.transition = "bottom 0.3s ease";
+        bottomBtn.style.bottom = "-50px";
+
+        let finished = false; // защита от двойного выполнения
 
         const finishBalance = () => {
+            if (finished) return;
+            finished = true;
+
             const newVal = input.value ? Number(input.value) : balanceValue;
             tempBalance = newVal;
-
             balanceText.textContent = newVal + ",00₽";
             balanceText.style.opacity = 1;
 
-            main.replaceChild(balanceText, input);
+            // Проверяем, что input ещё в DOM
+            if (input.parentNode) main.replaceChild(balanceText, input);
+
             showTop();
             moveMainDown();
+
+            // Возвращаем кнопку
+            setTimeout(() => {
+                bottomBtn.style.bottom = "20px";
+            }, 100);
         };
 
         input.addEventListener("blur", finishBalance);
@@ -277,8 +290,12 @@ doneBtn.addEventListener('click', () => {
             if (e.key === "Enter") {
                 e.preventDefault();
                 finishBalance();
-                input.blur();
+                input.blur(); // безопасно, finishBalance уже сработал
             }
+        });
+
+        input.addEventListener("input", () => {
+            input.value = input.value.replace(/[^0-9]/g, "");
         });
     });
 
