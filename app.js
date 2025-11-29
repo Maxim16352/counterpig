@@ -250,7 +250,7 @@ doneBtn.addEventListener('click', () => {
 
         const input = document.createElement("input");
         input.classList.add("editInput");
-        input.type = "text";
+        input.type = "number";
         input.inputMode = "tel";
         input.value = balanceValue;
         input.setAttribute("enterkeyhint", "done");
@@ -329,6 +329,7 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
 
