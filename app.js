@@ -251,7 +251,7 @@ doneBtn.addEventListener('click', () => {
         const input = document.createElement("input");
         input.classList.add("editInput");
         input.type = "text";
-        input.pattern = "[0-9]*";
+        input.inputMode = "tel";
         input.value = balanceValue;
         input.setAttribute("enterkeyhint", "done");
         input.autocomplete = "off";
@@ -331,5 +331,6 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
+
 
 
