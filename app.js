@@ -1,5 +1,5 @@
 /* ============================
-   app.js — 0.1.2
+   app.js — b0.12.1
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -106,7 +106,7 @@ textarea.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { 
         e.preventDefault(); 
         textarea.blur(); 
-        doneBtn.style.bottom = "150px"; 
+        doneBtn.style.bottom = "75px"; 
 } });
 /* -----------------------------------------------------
    Маска для серийного номера
@@ -255,12 +255,10 @@ doneBtn.addEventListener('click', () => {
 
         const input = document.createElement("input");
         input.classList.add("editInput");
-        input.type = "text";
-        input.inputMode = "tel";
+        input.type = "text";                  
+        input.inputMode = "decimal";          
+        input.setAttribute("enterkeyhint", "done")
         input.value = balanceValue;
-        input.setAttribute("enterkeyhint", "done"); 
-        input.autocomplete = "off";
-        input.autocorrect = "off";
 
         balanceText.style.opacity = 0.4;
         main.replaceChild(input, balanceText);
@@ -300,7 +298,7 @@ doneBtn.addEventListener('click', () => {
 
         input.addEventListener("blur", finishBalance);
         input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter"|| e.key === "." || e.key === ",") {
                 e.preventDefault();
                 finishBalance();
                 input.blur(); // безопасно, finishBalance уже сработал
