@@ -1,5 +1,5 @@
 /* ============================
-   app.js — основной код
+   app.js — 0.1.2
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -106,7 +106,7 @@ textarea.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { 
         e.preventDefault(); 
         textarea.blur(); 
-        doneBtn.style.bottom = "75px"; 
+        doneBtn.style.bottom = "150px"; 
 } });
 /* -----------------------------------------------------
    Маска для серийного номера
@@ -135,6 +135,11 @@ doneBtn.addEventListener('click', () => {
     doneBtn.remove();
 
     const main = mainBlock;
+
+    const textPercent = document.createElement('p');
+    textPercent.classList.add('textPercent');
+    textPercent.textContent = '74%';
+    main.appendChild(textPercent);
 
     /* GIF */
     const img = document.createElement('img');
@@ -250,11 +255,12 @@ doneBtn.addEventListener('click', () => {
 
         const input = document.createElement("input");
         input.classList.add("editInput");
-        input.type = "text";                  // ← обязательно text
-        input.inputMode = "decimal";          // ← цифровая клавиатура 0–9
-        input.setAttribute("enterkeyhint", "done")
+        input.type = "text";
+        input.inputMode = "tel";
         input.value = balanceValue;
-        input.setAttribute("enterkeyhint", "done");
+        input.setAttribute("enterkeyhint", "done"); 
+        input.autocomplete = "off";
+        input.autocorrect = "off";
 
         balanceText.style.opacity = 0.4;
         main.replaceChild(input, balanceText);
@@ -294,7 +300,7 @@ doneBtn.addEventListener('click', () => {
 
         input.addEventListener("blur", finishBalance);
         input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === ".") {
+            if (e.key === "Enter") {
                 e.preventDefault();
                 finishBalance();
                 input.blur(); // безопасно, finishBalance уже сработал
@@ -330,15 +336,3 @@ doneBtn.addEventListener('click', () => {
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
