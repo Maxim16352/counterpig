@@ -257,7 +257,7 @@ html, body {
     }
 }
 .jem-image {
-    margin-top: 32px;
+    margin-top: -10px;
     max-width: 70%;
     height: 170px;
     width: 170px;
@@ -382,4 +382,10 @@ html, body {
     color: #8D3939;
     font-size: 20px;
     margin-top:5px;
+}
+.textPercent{
+    text-align: center;
+    font-family: 'fira', Arial, sans-serif;
+    color: #585858;
+    font-size: 20px;
 }
