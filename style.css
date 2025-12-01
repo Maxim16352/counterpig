@@ -189,7 +189,7 @@ html, body {
 }
 .glass-button {
     position: absolute;
-    bottom: 150px; 
+    bottom: 75px; 
     left: 50%;
     transform: translateX(-50%);
     width: 90%; 
@@ -389,3 +389,4 @@ html, body {
     color: #585858;
     font-size: 20px;
 }
+
