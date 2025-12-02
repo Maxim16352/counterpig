@@ -1,11 +1,14 @@
 /* ============================
-   app.js — b0.12.1
+   app.js — b0.12.2
    ============================ */
 
 const textarea = document.getElementById('serial');
 const doneBtn = document.getElementById('doneBtn');
 const container = document.querySelector('.container');
 const mainBlock = document.querySelector('.glass-container.main');
+const buttonInfo = document.querySelector('.buttonInfo');
+const buttonBack = document.getElementById('backbutton');
+const buttons = document.querySelectorAll('#doneBtn, #backbutton');
 
 /* -----------------------------------------------------
    КЛАВИАТУРА (visualViewport) — важно для Telegram
@@ -108,229 +111,271 @@ textarea.addEventListener("keydown", (e) => {
         textarea.blur(); 
         doneBtn.style.bottom = "75px"; 
 } });
-/* -----------------------------------------------------
-   Маска для серийного номера
--------------------------------------------------------*/
+
 textarea.addEventListener('input', () => {
     let value = textarea.value.toUpperCase().replace(/[^A-Z]/g, '');
     if (value.length > 8) value = value.slice(0, 8);
     textarea.value = value.length > 4 ? value.slice(0, 4) + "-" + value.slice(4) : value;
 });
 
-/* -----------------------------------------------------
-   Основная логика (кнопка "Готово")
--------------------------------------------------------*/
-doneBtn.addEventListener('click', () => {
-    const fullSerial = textarea.value.trim();
-    if (!fullSerial || fullSerial.length !== 9) {
-        alert("Введите серийный номер формата XXXX-XXXX");
-        return;
-    }
+buttonInfo.addEventListener('click', () => {
 
-    doneBtn.classList.add('hide');
-    container.classList.add('active');
-    document.querySelector('.helloText')?.remove();
-    document.querySelector('.pepe')?.remove();
-    document.querySelector('.textarea-container')?.remove();
-    doneBtn.remove();
+    container.classList.add('back');
+    document.querySelector('.textPercent')?.remove();
+    document.querySelector('.jem-image')?.remove();
+    document.querySelector('.rowBlock')?.remove();
+    document.querySelector('.rowBlock')?.remove();
+    document.querySelector('.balance-text')?.remove();
+    document.querySelector('.glass-button1')?.remove();
+    buttonBack.classList.add('active');
+
+    buttonBack.addEventListener('click', () => {
+        buttonBack.classList.remove('active');
+    });
 
     const main = mainBlock;
 
-    const textPercent = document.createElement('p');
-    textPercent.classList.add('textPercent');
-    textPercent.textContent = '74%';
-    main.appendChild(textPercent);
+    const textProject = document.createElement('p');
+    textProject.classList.add('nameProject');
+    textProject.textContent = 'SMART COUNTER';
+    main.appendChild(textProject);
+    setTimeout(() => textProject.classList.add('show'), 20);
 
-    /* GIF */
-    const img = document.createElement('img');
-    img.src = "CounterMenu.gif";
-    img.classList.add('jem-image');
-    main.appendChild(img);
-    setTimeout(() => img.classList.add('show'), 20);
+    const infoProject = document.createElement('p');
+    infoProject.classList.add('infoProject');
+    infoProject.textContent = 'Если в меню отображается ✅ , значит,\nсоединение между копилкой и\nсервером успешно установлено\nЕсли в меню отображается ❌, значит,\nсоединение не с копилкой не\nустановлено, проверьте:\n- Подключение копилки к интернету\n- Правильность введенного номера\nкопилки\n- Также рекомендуется перезагрузить\nустройство';
+    main.appendChild(infoProject);
+    setTimeout(() => infoProject.classList.add('show'), 20);
 
-    /* Состояния */
-    let titleValue = "Моя копилка";
-    let balanceValue = 0;
-    let previousBalance = 0;
-    let tempBalance = null;
-    let tempTitle = null;
-    let totalPlus = 0;
-    let totalMinus = 0;
+    const creatorProject = document.createElement('p');
+    creatorProject.classList.add('creatorProject');
+    creatorProject.textContent = 'Проект создан учеником 10 “И”\nкласса Рабазановым Магомедом';
+    main.appendChild(creatorProject);
+    setTimeout(() => creatorProject.classList.add('show'), 20);
 
-    function createRow(textValue, imgSrc, action) {
-        const row = document.createElement('div');
-        row.classList.add('rowBlock');
+    const yearProject = document.createElement('p');
+    yearProject.classList.add('yearProject');
+    yearProject.textContent = '2025 г.';
+    main.appendChild(yearProject);
+    setTimeout(() => yearProject.classList.add('show'), 20);
 
-        const text = document.createElement('p');
-        text.classList.add('rowText');
-        text.textContent = textValue;
+});
 
-        const icon = document.createElement('img');
-        icon.classList.add('rowIcon');
-        icon.src = imgSrc;
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const fullSerial = textarea.value.trim();
+        if (!fullSerial || fullSerial.length !== 9) {
+            alert("Введите серийный номер формата XXXX-XXXX");
+            return;
+        }
+        container.classList.remove('back');
+        doneBtn.classList.add('hide');
+        container.classList.add('active');
+        document.querySelector('.nameProject')?.remove();
+        document.querySelector('.infoProject')?.remove();
+        document.querySelector('.creatorProject')?.remove();
+        document.querySelector('.yearProject')?.remove();
+        document.querySelector('.helloText')?.remove();
+        document.querySelector('.pepe')?.remove();
+        document.querySelector('.textarea-container')?.remove();
+        doneBtn.remove();
 
-        /* РЕДАКТИРОВАТЬ НАЗВАНИЕ */
-        if (action === "edit") {
-            icon.addEventListener('click', () => {
-                if (row.querySelector('input')) return;
+        const main = mainBlock;
 
-                hideTop();
-                const input = document.createElement('input');
-                input.classList.add('editInput');
-                input.type = "text";
-                input.value = text.textContent;
-                input.setAttribute("enterkeyhint", "done");
-                bottomBtn.style.opacity = "0";
-                bottomBtn.style.pointerEvents = "none"; // не кликабельна
-                bottomBtn.style.bottom = "-150px";      // уезжает вниз
+        const textPercent = document.createElement('p');
+        textPercent.classList.add('textPercent');
+        textPercent.textContent = '74%';
+        main.appendChild(textPercent);
+        setTimeout(() => textPercent.classList.add('show'), 20);
 
-                text.style.opacity = 0.4;
-                row.replaceChild(input, text);
+        /* GIF */
+        const img = document.createElement('img');
+        img.src = "CounterMenu.gif";
+        img.classList.add('jem-image');
+        main.appendChild(img);
+        setTimeout(() => img.classList.add('show'), 20);
 
-                input.focus();
-                moveMainUp();
+        /* Состояния */
+        let titleValue = "Моя копилка";
+        let balanceValue = 0;
+        let previousBalance = 0;
+        let tempBalance = null;
+        let tempTitle = null;
+        let totalPlus = 0;
+        let totalMinus = 0;
 
-                input.addEventListener('input', () => tempTitle = input.value);
+        function createRow(textValue, imgSrc, action) {
+            const row = document.createElement('div');
+            row.classList.add('rowBlock');
 
-                const finishEdit = () => {
-                    titleValue = tempTitle ?? input.value;
-                    text.textContent = titleValue;
+            const text = document.createElement('p');
+            text.classList.add('rowText');
+            text.textContent = textValue;
 
-                    row.replaceChild(text, input);
-                    text.style.opacity = 1;
-                    showTop();
-                    moveMainDown();
-                    setTimeout(() => {
-                        bottomBtn.style.opacity = "1";
-                        bottomBtn.style.pointerEvents = "auto"; // не кликабельна
-                        bottomBtn.style.bottom = "20px"; 
-                    }, 100);
-                };
+            const icon = document.createElement('img');
+            icon.classList.add('rowIcon');
+            icon.src = imgSrc;
 
-                input.addEventListener("blur", finishEdit);
-                input.addEventListener("keydown", e => {
-                    if (e.key === "Enter") {
-                        e.preventDefault();
-                        finishEdit();
-                        input.blur();
+            /* РЕДАКТИРОВАТЬ НАЗВАНИЕ */
+            if (action === "edit") {
+                icon.addEventListener('click', () => {
+                    if (row.querySelector('input')) return;
+
+                    hideTop();
+                    const input = document.createElement('input');
+                    input.classList.add('editInput');
+                    input.type = "text";
+                    input.value = text.textContent;
+                    input.setAttribute("enterkeyhint", "done");
+                    bottomBtn.style.opacity = "0";
+                    bottomBtn.style.pointerEvents = "none"; // не кликабельна
+                    bottomBtn.style.bottom = "-150px";      // уезжает вниз
+
+                    text.style.opacity = 0.4;
+                    row.replaceChild(input, text);
+
+                    input.focus();
+                    moveMainUp();
+
+                    input.addEventListener('input', () => tempTitle = input.value);
+
+                    const finishEdit = () => {
+                        titleValue = tempTitle ?? input.value;
+                        text.textContent = titleValue;
+
+                        row.replaceChild(text, input);
+                        text.style.opacity = 1;
+                        showTop();
+                        moveMainDown();
+                        setTimeout(() => {
+                            bottomBtn.style.opacity = "1";
+                            bottomBtn.style.pointerEvents = "auto"; // не кликабельна
+                            bottomBtn.style.bottom = "20px"; 
+                        }, 100);
+                    };
+
+                    input.addEventListener("blur", finishEdit);
+                    input.addEventListener("keydown", e => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            finishEdit();
+                            input.blur();
+                        }
+                    });
+                });
+            }
+
+            if (action === "showserial") {
+                icon.addEventListener("click", () => {
+                    if (text.dataset.shown === "true") {
+                        text.textContent = fullSerial.slice(0, 4) + "-****";
+                        text.dataset.shown = "false";
+                    } else {
+                        text.textContent = fullSerial;
+                        text.dataset.shown = "true";
                     }
                 });
-            });
+            }
+
+            row.appendChild(text);
+            row.appendChild(icon);
+            main.appendChild(row);
+            setTimeout(() => row.classList.add('show'), 20);
+            return row;
         }
 
-        if (action === "showserial") {
-            icon.addEventListener("click", () => {
-                if (text.dataset.shown === "true") {
-                    text.textContent = fullSerial.slice(0, 4) + "-****";
-                    text.dataset.shown = "false";
-                } else {
-                    text.textContent = fullSerial;
-                    text.dataset.shown = "true";
+        createRow(fullSerial.slice(0, 4) + "-****", "openeye.png", "showserial");
+        createRow(titleValue, "pen.png", "edit");
+
+        /* ------------------- БАЛАНС ------------------- */
+        const balanceText = document.createElement('p');
+        balanceText.classList.add('balance-text');
+        balanceText.textContent = balanceValue + ",00₽";
+        main.appendChild(balanceText);
+        setTimeout(() => balanceText.classList.add('show'), 20);
+
+        balanceText.addEventListener("click", () => {
+            if (main.querySelector("input")) return;
+
+            hideTop();
+
+            const input = document.createElement("input");
+            input.classList.add("editInput");
+            input.type = "text";                  
+            input.inputMode = "decimal";          
+            input.setAttribute("enterkeyhint", "done")
+            input.value = balanceValue;
+
+            balanceText.style.opacity = 0.4;
+            main.replaceChild(input, balanceText);
+            input.focus();
+
+            moveMainUp();
+
+            bottomBtn.style.opacity = "0";
+            bottomBtn.style.pointerEvents = "none"; 
+            bottomBtn.style.bottom = "-150px"; 
+
+            let finished = false; 
+
+            const finishBalance = () => {
+                if (finished) return;
+                finished = true;
+
+                const newVal = input.value ? Number(input.value) : balanceValue;
+                tempBalance = newVal;
+                balanceText.textContent = newVal + ",00₽";
+                balanceText.style.opacity = 1;
+
+                // Проверяем, что input ещё в DOM
+                if (input.parentNode) main.replaceChild(balanceText, input);
+
+                showTop();
+                moveMainDown();
+
+                // Возвращаем кнопку
+                setTimeout(() => {
+                    bottomBtn.style.opacity = "1";
+                    bottomBtn.style.pointerEvents = "auto"; 
+                    bottomBtn.style.bottom = "20px"; 
+                }, 100);
+            };
+
+            input.addEventListener("blur", finishBalance);
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter"|| e.key === "." || e.key === ",") {
+                    e.preventDefault();
+                    finishBalance();
+                    input.blur(); 
                 }
             });
-        }
 
-        row.appendChild(text);
-        row.appendChild(icon);
-        main.appendChild(row);
-        setTimeout(() => row.classList.add('show'), 20);
-        return row;
-    }
+            input.addEventListener("input", () => {
+                input.value = input.value.replace(/[^0-9]/g, "");
+            });
+        });
 
-    /* строки */
-    createRow(fullSerial.slice(0, 4) + "-****", "openeye.png", "showserial");
-    createRow(titleValue, "pen.png", "edit");
+        const bottomBtn = document.createElement("button");
+        bottomBtn.textContent = "Применить изменения";
+        bottomBtn.classList.add("glass-button1");
+        container.appendChild(bottomBtn);
+        setTimeout(() => bottomBtn.classList.add("show"), 20);
 
-    /* ------------------- БАЛАНС ------------------- */
-    const balanceText = document.createElement('p');
-    balanceText.classList.add('balance-text');
-    balanceText.textContent = balanceValue + ",00₽";
-    main.appendChild(balanceText);
-    setTimeout(() => balanceText.classList.add('show'), 20);
+        bottomBtn.addEventListener("click", () => {
+            if (tempBalance !== null) {
+                const diff = tempBalance - previousBalance;
+                balanceValue = tempBalance;
+                previousBalance = balanceValue;
 
-    balanceText.addEventListener("click", () => {
-        if (main.querySelector("input")) return;
+                if (diff < 0) totalMinus += Math.abs(diff);
+                if (diff > 0) totalPlus += diff;
 
-        hideTop();
+                document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
+                document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
 
-        const input = document.createElement("input");
-        input.classList.add("editInput");
-        input.type = "text";                  
-        input.inputMode = "decimal";          
-        input.setAttribute("enterkeyhint", "done")
-        input.value = balanceValue;
-
-        balanceText.style.opacity = 0.4;
-        main.replaceChild(input, balanceText);
-        input.focus();
-
-        moveMainUp();
-
-        // Убираем кнопку вниз при фокусе
-        bottomBtn.style.opacity = "0";
-        bottomBtn.style.pointerEvents = "none"; // не кликабельна
-        bottomBtn.style.bottom = "-150px"; 
-
-        let finished = false; // защита от двойного выполнения
-
-        const finishBalance = () => {
-            if (finished) return;
-            finished = true;
-
-            const newVal = input.value ? Number(input.value) : balanceValue;
-            tempBalance = newVal;
-            balanceText.textContent = newVal + ",00₽";
-            balanceText.style.opacity = 1;
-
-            // Проверяем, что input ещё в DOM
-            if (input.parentNode) main.replaceChild(balanceText, input);
-
-            showTop();
-            moveMainDown();
-
-            // Возвращаем кнопку
-            setTimeout(() => {
-                bottomBtn.style.opacity = "1";
-                bottomBtn.style.pointerEvents = "auto"; // не кликабельна
-                bottomBtn.style.bottom = "20px"; 
-            }, 100);
-        };
-
-        input.addEventListener("blur", finishBalance);
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter"|| e.key === "." || e.key === ",") {
-                e.preventDefault();
-                finishBalance();
-                input.blur(); // безопасно, finishBalance уже сработал
+                balanceText.textContent = balanceValue + ",00₽";
+                tempBalance = null;
             }
         });
-
-        input.addEventListener("input", () => {
-            input.value = input.value.replace(/[^0-9]/g, "");
         });
-    });
-
-    /* ------------------- Кнопка "Применить изменения" ------------------- */
-    const bottomBtn = document.createElement("button");
-    bottomBtn.textContent = "Применить изменения";
-    bottomBtn.classList.add("glass-button1");
-    container.appendChild(bottomBtn);
-    setTimeout(() => bottomBtn.classList.add("show"), 20);
-
-    bottomBtn.addEventListener("click", () => {
-        if (tempBalance !== null) {
-            const diff = tempBalance - previousBalance;
-            balanceValue = tempBalance;
-            previousBalance = balanceValue;
-
-            if (diff < 0) totalMinus += Math.abs(diff);
-            if (diff > 0) totalPlus += diff;
-
-            document.getElementById("plusmoney").textContent = "+" + totalPlus + "₽";
-            document.getElementById("minusmoney").textContent = "-" + totalMinus + "₽";
-
-            balanceText.textContent = balanceValue + ",00₽";
-            tempBalance = null;
-        }
-    });
 });
