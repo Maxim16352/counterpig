@@ -115,6 +115,11 @@ html, body {
     margin-top: 32px;
     color: #585858;
     text-align: center;
+    opacity: 0;               
+    transition: opacity 1000ms ease;
+}
+.helloText.show{
+    opacity: 1;
 }
 
 .pepe {
@@ -122,6 +127,11 @@ html, body {
     max-width: 70%;
     height: auto;
     display: block;
+    opacity: 0;               
+    transition: opacity 1000ms ease;
+}
+.pepe.show{
+    opacity: 1;
 }
 
 
@@ -133,8 +143,11 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    opacity: 1;               
+    opacity: 0;               
     transition: opacity 1000ms ease;
+}
+.textarea-container.show{
+    opacity: 1;
 }
 
 .textAreaLabel {
@@ -189,7 +202,7 @@ html, body {
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
     transition: bottom 0.3s ease, opacity 0.3s ease;
-    opacity: 1;  
+    opacity: 0;  
     pointer-events: auto;
     z-index: 1000;
 }
@@ -212,7 +225,7 @@ html, body {
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
     transition: all 0.25s ease;
-    opacity: 1;               
+    opacity: 0;               
     transition: opacity 1000ms ease;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     transition: bottom 0.25s ease;
@@ -223,7 +236,9 @@ html, body {
 .glass-button.hide {
     opacity: 0;                
 }
-
+.glass-button.show {
+    opacity: 1;                
+}
 .glass-button:active,
 .glass-button:hover {
     border-color: rgba(0,122,255,0.45);
@@ -433,6 +448,7 @@ html, body {
     opacity: 1;
 }
 .nameProject{
+    position: fixed;
     text-align: center;
     font-family: 'fira', Arial, sans-serif;
     color: #585858;
