@@ -390,6 +390,9 @@ html, body {
     margin-top:5px;
 }
 .textPercent{
+    display: block;
+    margin-top:0px;
+    margin-bottom:10px;
     text-align: center;
     font-family: 'fira', Arial, sans-serif;
     color: #585858;
@@ -441,7 +444,6 @@ html, body {
     opacity: 1;
 }
 .infoProject{
-    top:120px;
     white-space: pre-line;
     position: fixed;
     bottom: 400px;
@@ -485,4 +487,3 @@ html, body {
 .yearProject.show{
     opacity: 1;
 }
-
