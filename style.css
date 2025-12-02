@@ -424,7 +424,7 @@ html, body {
     left: 50%;
     top:-100px;
     transform: translateX(-50%);
-    width: 90%; 
+    width: 100%; 
     max-width: 329px;
     height: 64px;
     font-family: 'Fascinate1', Arial, sans-serif;
@@ -503,3 +503,4 @@ html, body {
 .yearProject.show{
     opacity: 1;
 }
+
