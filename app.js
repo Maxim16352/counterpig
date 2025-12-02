@@ -1,5 +1,5 @@
 /* ============================
-   app.js — b0.12.2
+   app.js — b0.12.3
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -119,14 +119,27 @@ textarea.addEventListener('input', () => {
 });
 
 buttonInfo.addEventListener('click', () => {
+    const elements = [
+    '.textPercent',
+    '.jem-image',
+    '.balance-text',
+    '.glass-button1'
+    ];
 
+    elements.forEach(selector => {
+    const el = document.querySelector(selector);
+    if (el) {
+        setTimeout(() => el.classList.remove('show'), 20);
+        setTimeout(() => el.remove(), 1000);
+    }
+    });
+
+    // Для rowBlock, если их два
+    document.querySelectorAll('.rowBlock').forEach(el => {
+        setTimeout(() => el.classList.remove('show'), 20);
+        setTimeout(() => el.remove(), 1000);
+    });
     container.classList.add('back');
-    document.querySelector('.textPercent')?.remove();
-    document.querySelector('.jem-image')?.remove();
-    document.querySelector('.rowBlock')?.remove();
-    document.querySelector('.rowBlock')?.remove();
-    document.querySelector('.balance-text')?.remove();
-    document.querySelector('.glass-button1')?.remove();
     buttonBack.classList.add('active');
 
     buttonBack.addEventListener('click', () => {
@@ -171,14 +184,24 @@ buttons.forEach(btn => {
         container.classList.remove('back');
         doneBtn.classList.add('hide');
         container.classList.add('active');
-        document.querySelector('.nameProject')?.remove();
-        document.querySelector('.infoProject')?.remove();
-        document.querySelector('.creatorProject')?.remove();
-        document.querySelector('.yearProject')?.remove();
+        const elements = [
+        '.nameProject',
+        '.infoProject',
+        '.creatorProject',
+        '.yearProject',
+        '.glass-button'
+        ];
+
+        elements.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+            setTimeout(() => el.classList.remove('show'), 20);
+            setTimeout(() => el.remove(), 1000);
+        }
+        });
         document.querySelector('.helloText')?.remove();
         document.querySelector('.pepe')?.remove();
         document.querySelector('.textarea-container')?.remove();
-        doneBtn.remove();
 
         const main = mainBlock;
 
