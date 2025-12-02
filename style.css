@@ -441,6 +441,7 @@ html, body {
     opacity: 1;
 }
 .infoProject{
+    top:120px;
     white-space: pre-line;
     position: fixed;
     bottom: 400px;
@@ -484,3 +485,4 @@ html, body {
 .yearProject.show{
     opacity: 1;
 }
+
