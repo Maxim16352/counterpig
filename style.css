@@ -425,7 +425,6 @@ html, body {
     top:-100px;
     transform: translateX(-50%);
     width: 100%; 
-    max-width: 329px;
     height: 64px;
     font-family: 'Fascinate1', Arial, sans-serif;
     font-size: 18px;
@@ -503,4 +502,5 @@ html, body {
 .yearProject.show{
     opacity: 1;
 }
+
 
