@@ -69,10 +69,16 @@ html, body {
 .container.active .glass-container.main {
     bottom: -234px;
 }
-
+.container.back .glass-container.main {
+    bottom: -110px;
+}
 .container.active .glass-container.top {
     top: 0;
     opacity: 1;
+}
+.container.back .glass-container.top {
+    top: -100px;
+    opacity: 0;
 }
 .glass-container.top.edit-away { top: -180px !important; 
     opacity: 0 !important; 
@@ -270,7 +276,7 @@ html, body {
     opacity: 1;                
 }
 .rowBlock {
-    margin: 0 auto -30px; /* Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â²ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã¢â‚¬Â¦Ãƒâ€˜Ã†â€™ 0, ÃƒÂÃ‚Â¿ÃƒÂÃ‚Â¾ ÃƒÂÃ‚Â±ÃƒÂÃ‚Â¾ÃƒÂÃ‚ÂºÃƒÂÃ‚Â°ÃƒÂÃ‚Â¼ auto, Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â·Ãƒâ€˜Ã†â€™ 25px */
+    margin: 0 auto -30px; 
     display: flex;
     align-items: center;
     gap: 12px;
@@ -292,11 +298,11 @@ html, body {
     font-family: 'fira', Arial, sans-serif;
     font-size: 40px;
     color: #585858;
-    opacity: 0;                /* Ã‘ÂÃ‘â€šÃÂ°Ã‘â‚¬Ã‘â€š */
+    opacity: 0;                
     transition: opacity 1000ms ease;
 }
 .balance-text.show {
-    opacity: 1;                /* fade-in */
+    opacity: 1;                
 }
 .editInput {
     padding: 6px 10px;
@@ -322,7 +328,7 @@ html, body {
 
     display: flex;
     align-items: center;
-    justify-content: center; /* Ñ†ÐµÐ½Ñ‚Ñ€Ð¸Ñ€ÑƒÐµÐ¼ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð±Ð»Ð¾Ðº */
+    justify-content: center; 
 }
 .nameUser{
     font-family: 'Fascinate1', Arial, sans-serif;
@@ -343,7 +349,7 @@ html, body {
 .infouser {
     width: 100%;
     display: flex;
-    justify-content: space-between; /* â† Ð›Ð•Ð’Ðž, Ð¦Ð•ÐÐ¢Ð , ÐŸÐ ÐÐ’Ðž */
+    justify-content: space-between; 
     align-items: center;
 }
 .plusblock,
@@ -357,7 +363,7 @@ html, body {
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
 }
 .glass-payment {
-    width: 85%;               /* Ñ‚Ð°ÐºÐ°Ñ Ð¶Ðµ ÑˆÐ¸Ñ€Ð¸Ð½Ð°, ÐºÐ°Ðº Ð¸ nameInfo */
+    width: 85%;               
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -388,5 +394,93 @@ html, body {
     font-family: 'fira', Arial, sans-serif;
     color: #585858;
     font-size: 20px;
+    opacity: 0;
+    transition: opacity 1000ms ease;
 }
-
+.textPercent.show{
+    opacity: 1;
+}
+.glass-button-back{
+    z-index: 1000;
+    position: absolute;
+    left: 50%;
+    top:-100px;
+    transform: translateX(-50%);
+    width: 90%; 
+    max-width: 329px;
+    height: 64px;
+    font-family: 'Fascinate1', Arial, sans-serif;
+    font-size: 18px;
+    color: #585858;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 34px;
+    cursor: pointer;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), 0 4px 18px rgba(0,0,0,0.10);
+    transition: all 0.25s ease;
+    opacity: 1;               
+    transition: opacity 1000ms ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: bottom 0.25s ease, top 0.6s ease;
+}
+.glass-button-back.active{
+    top: 16px;
+    opacity: 1;
+}
+.nameProject{
+    text-align: center;
+    font-family: 'fira', Arial, sans-serif;
+    color: #585858;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 1000ms ease;
+}
+.nameProject.show{
+    opacity: 1;
+}
+.infoProject{
+    white-space: pre-line;
+    position: fixed;
+    bottom: 400px;
+    font-family: 'fira', Arial, sans-serif;
+    color: #585858;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 1000ms ease;
+}
+.infoProject.show{
+    opacity: 1;
+}
+.creatorProject{
+    white-space: pre-line;
+    position: fixed;
+    bottom: 200px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'fira', Arial, sans-serif;
+    color: #585858;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 1000ms ease;
+}
+.creatorProject.show{
+    opacity: 1;
+}
+.yearProject{
+    position: fixed;
+    bottom: 115px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'fira', Arial, sans-serif;
+    color: #585858;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 1000ms ease;
+}
+.yearProject.show{
+    opacity: 1;
+}
