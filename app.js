@@ -309,7 +309,6 @@ async function autoLoginWithTelegram(fullSerial) {
     } catch (err) {
         console.error("Автовход не удался:", err);
         textarea.classList.add("input-error"); // подсвечиваем красным
-        enterInterface(fullSerial); // fallback, если нужно
     }
 }
 
@@ -650,3 +649,4 @@ buttons.forEach(btn => {
         await autoLoginWithTelegram(fullSerial);
     });
 });
+
