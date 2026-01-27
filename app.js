@@ -255,63 +255,6 @@ function publishDevice(topic, value) {
         { retain: true } // ключевой момент!
     );
 }
-async function autoLoginWithTelegram(fullSerial) {
-    textarea.classList.remove("input-error"); // сбрасываем ошибку перед попыткой
-
-    if (!window.Telegram || !window.Telegram.WebApp) {
-        try {
-            await connectMQTT(fullSerial);
-            enterInterface(fullSerial);
-        } catch (err) {
-            textarea.classList.add("input-error");
-        }
-        return;
-    }
-
-    const tg = window.Telegram.WebApp;
-    const chatId = tg.initDataUnsafe?.user?.id;
-    if (!chatId) {
-        try {
-            await connectMQTT(fullSerial);
-            enterInterface(fullSerial);
-        } catch (err) {
-            textarea.classList.add("input-error");
-        }
-        return;
-    }
-
-    try {
-        await connectMQTT(fullSerial);
-
-        const chatTopic = `devices/${fullSerial}/chat_id`;
-        mqttClient.subscribe(chatTopic);
-
-        let handled = false;
-
-        mqttClient.once("message", (topic, message) => {
-            if (topic !== chatTopic || handled) return;
-            handled = true;
-
-            const deviceChatId = message.toString();
-
-            if (!deviceChatId) {
-                publishDevice("chat_id", chatId);
-                enterInterface(fullSerial);
-            } else if (deviceChatId === String(chatId)) {
-                enterInterface(fullSerial);
-            } else {
-                enterInterface(fullSerial);
-            }
-        });
-
-        publishDevice("chat_id_request", "get");
-
-    } catch (err) {
-        console.error("Автовход не удался:", err);
-        textarea.classList.add("input-error"); // подсвечиваем красным
-    }
-}
-
 
 
 function enterInterface(fullSerial) {
@@ -636,17 +579,19 @@ buttonInfo.addEventListener('click', () => {
 
 });
 
-
 buttons.forEach(btn => {
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click',async () => {
         const fullSerial = textarea.value.trim();
         if (!fullSerial || fullSerial.length !== 9) {
             alert("Введите серийный номер формата XXXX-XXXX");
             return;
         }
+        try {
+            await connectMQTT(fullSerial);
+            enterInterface(fullSerial);
 
-        // Используем новый автологин
-        await autoLoginWithTelegram(fullSerial);
-    });
+        } catch (err) {
+            textarea.classList.add("input-error");
+        }
+        });
 });
-
