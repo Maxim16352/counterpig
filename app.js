@@ -1,5 +1,5 @@
 /* ============================
-   app.js — b27.01.2026 tg mqtt
+   app.js — b12.02.2026 hotFix
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -508,7 +508,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 textarea.addEventListener("focus", () => { 
-    doneBtn.style.bottom = "-50px"; 
+    doneBtn.style.bottom = "-50px";
+    textarea.classList.remove("input-error");
 }); 
 textarea.addEventListener("keydown", (e) => { 
     if (e.key === "Enter") { 
@@ -547,10 +548,6 @@ buttonInfo.addEventListener('click', () => {
     container.classList.add('back');
     buttonBack.classList.add('active');
 
-    buttonBack.addEventListener('click', () => {
-        buttonBack.classList.remove('active');
-    });
-
     const main = mainBlock;
 
     const textProject = document.createElement('p');
@@ -588,6 +585,7 @@ buttons.forEach(btn => {
         }
         try {
             await connectMQTT(fullSerial);
+            buttonBack.classList.remove('active');
             enterInterface(fullSerial);
 
         } catch (err) {
@@ -595,3 +593,4 @@ buttons.forEach(btn => {
         }
         });
 });
+
