@@ -596,13 +596,12 @@ buttons.forEach(btn => {
         try {
             await connectMQTT(fullSerial);
             buttonBack.classList.remove('active');
+            buttonQuit.classList.remove('active');
             enterInterface(fullSerial);
 
         } catch (err) {
             textarea.classList.add("input-error");
-            buttonBack.classList.remove('active');
-            buttonQuit.classList.remove('active');
-            enterInterface(fullSerial);
         }
         });
 });
+
