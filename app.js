@@ -1,5 +1,5 @@
 /* ============================
-   app.js — b12.02.2026 autolog
+   app.js — b05.05.2026 servo
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -29,7 +29,8 @@ let deviceState = {
     deposits: 0,
     expenses: 0,
     battery: 0,
-    status: "offline"
+    status: "offline",
+    servo: 0
 };
 
 // ---------- ДОБАВЛЕНО: хранение chat_id ----------
@@ -78,7 +79,8 @@ function subscribeDeviceTopics(serial) {
         `devices/${serial}/name`,
         `devices/${serial}/battery`,
         `devices/${serial}/balance`,
-        `devices/${serial}/status`
+        `devices/${serial}/status`,
+        `devices/${serial}/servo`
     ];
 
     mqttClient.subscribe(topics, (err) => {
@@ -100,6 +102,10 @@ function subscribeDeviceTopics(serial) {
         if (topic.endsWith("/status")) {
             deviceState.status = value;
             updateStatus(value);
+        }
+        if (topic.endsWith("/servo")) {
+            deviceState.servo = Number(value);
+            updateServo(deviceState.servo);
         }
     });
 
@@ -151,6 +157,11 @@ function updateStatus(value) {
     const icon = document.querySelector(".checkconnect");
     if (!icon) return;
     icon.textContent = value === "online" ? "✅" : "❌";
+}
+function updateServo(value) {
+    const button = document.querySelector(".glass-button-open-lock");
+    if (!button) return;
+    button.innerHTML = value === 1 ? '<img src="open.svg" alt="">' : '<img src="lock.svg" alt="">';
 }
 
 /* ВОССТАНОВЛЕНИЕ ПОЗИЦИИ main */
@@ -538,8 +549,8 @@ function enterInterface(fullSerial) {
     });
 
     const bottomBtn = document.createElement("button");
-    bottomBtn.textContent = "Применить изменения";
-    bottomBtn.classList.add("glass-button1");
+    bottomBtn.textContent = "Сохранить";
+    bottomBtn.classList.add("glass-button-new");
     container.appendChild(bottomBtn);
     setTimeout(() => bottomBtn.classList.add("show"), 20);
 
@@ -564,6 +575,24 @@ function enterInterface(fullSerial) {
             tempBalance = null;
         }
     });
+    const bottomBtnOpen = document.createElement("button");
+    bottomBtnOpen.innerHTML = '<img src="open.svg" alt="">';
+    bottomBtnOpen.classList.add("glass-button-open-lock");
+    container.appendChild(bottomBtnOpen);
+    setTimeout(() => bottomBtnOpen.classList.add("show"), 20);
+    bottomBtnOpen.addEventListener("click", () => {
+        if (!mqttClient || !deviceState.serial) return;
+        if (deviceState.status == "online"){
+            const current = deviceState.servo;
+            const next = current === 1 ? 0 : 1;
+            console.log(current)
+
+            deviceState.servo = next;
+            updateServo(next);
+
+            mqttClient.publish(`devices/${deviceState.serial}/servo`, String(next), { retain: true });
+        }
+    });
 
 }
 
@@ -577,20 +606,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         try { tg.expand(); } catch {}
 
         const user = tg.initDataUnsafe?.user;
-        // ---------- ДОБАВЛЕНО: запоминаем chat_id ----------
         currentChatId = user?.id || null;
-        // ------------------------------------------------
 
         const nameElement = document.querySelector('.nameUser');
         if (nameElement) {
             nameElement.textContent = user ? user.first_name + (user.last_name ? " " + user.last_name : "") : "Гость";
         }
 
-        // ---------- ДОБАВЛЕНО: авто-вход ----------
         if (currentChatId) {
             const storedSerial = await autoLogin(currentChatId);
             if (storedSerial) {
-                // Форматируем для отображения (если нужно)
                 const formattedSerial = storedSerial.length === 8 ? storedSerial.slice(0,4) + "-" + storedSerial.slice(4) : storedSerial;
                 textarea.value = formattedSerial;
                 try {
@@ -598,12 +623,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     buttonBack.classList.remove('active');
                     enterInterface(storedSerial);
                 } catch (err) {
-                    // Если не удалось подключиться – остаёмся на экране ввода
                     console.warn("Auto-login failed", err);
                 }
             }
         }
-        // ------------------------------------------
     }
 });
 
@@ -639,7 +662,8 @@ buttonInfo.addEventListener('click', () => {
         '.textPercent',
         '.jem-image',
         '.balance-text',
-        '.glass-button1',
+        '.glass-button-new',
+        '.glass-button-open-lock',
         '.glass-button2'   // ДОБАВЛЕНО: тоже скрываем при выходе в info
     ];
 
