@@ -1,5 +1,5 @@
 /* ============================
-   app.js — b05.05.2026 servo
+   app.js — b12.02.2026 autolog
    ============================ */
 
 const textarea = document.getElementById('serial');
