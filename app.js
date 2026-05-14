@@ -1,5 +1,5 @@
 /* ============================
-   app.js — b05.05.2026 servo
+   app.js — b14.05.2026 fix bags
    ============================ */
 
 const textarea = document.getElementById('serial');
@@ -9,7 +9,6 @@ const mainBlock = document.querySelector('.glass-container.main');
 const buttonInfo = document.querySelector('.buttonInfo');
 const buttonBack = document.getElementById('backbutton');
 const buttonQuit = document.getElementById('quitbutton');
-const buttons = document.querySelectorAll('#doneBtn, #backbutton');
 const MQTT_BROKER = "wss://m1.wqtt.ru:18875/mqtt"; 
 
 const MQTT_USERNAME = "u_M8IWA2";
@@ -30,7 +29,8 @@ let deviceState = {
     expenses: 0,
     battery: 0,
     status: "offline",
-    servo: 0
+    servo: 0,
+    enteredBack: false
 };
 
 // ---------- ДОБАВЛЕНО: хранение chat_id ----------
@@ -361,6 +361,10 @@ function enterInterface(fullSerial) {
         '.yearProject',
         '.glass-button'
     ];
+    const elementsBack = [
+        '.glass-button-back',
+        '.glass-button-quit'
+    ];
 
     elements.forEach(selector => {
         const el = document.querySelector(selector);
@@ -369,6 +373,14 @@ function enterInterface(fullSerial) {
             setTimeout(() => el.remove(), 1000);
         }
     });
+    if (deviceState.enteredBack == true){
+        elementsBack.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+            setTimeout(() => el.classList.remove('active'), 20);
+        }
+    });
+    }
     document.querySelector('.helloText')?.remove();
     document.querySelector('.pepe')?.remove();
     document.querySelector('.textarea-container')?.remove();
@@ -664,7 +676,7 @@ buttonInfo.addEventListener('click', () => {
         '.balance-text',
         '.glass-button-new',
         '.glass-button-open-lock',
-        '.glass-button2'   // ДОБАВЛЕНО: тоже скрываем при выходе в info
+        '.glass-button2'
     ];
 
     elements.forEach(selector => {
@@ -679,6 +691,7 @@ buttonInfo.addEventListener('click', () => {
         setTimeout(() => el.classList.remove('show'), 20);
         setTimeout(() => el.remove(), 1000);
     });
+    deviceState.enteredBack = true;
     container.classList.add('back');
     buttonBack.classList.add('active');
     buttonQuit.classList.add('active');
@@ -710,20 +723,24 @@ buttonInfo.addEventListener('click', () => {
     setTimeout(() => yearProject.classList.add('show'), 20);
 });
 buttonQuit.addEventListener('click', logout);
-buttons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-        const fullSerial = textarea.value.trim();
-        if (!fullSerial || fullSerial.length !== 9) {
-            alert("Введите серийный номер формата XXXX-XXXX");
-            return;
-        }
-        try {
-            await connectMQTT(fullSerial);
-            buttonBack.classList.remove('active');
-            buttonQuit.classList.remove('active');
-            enterInterface(fullSerial);
-        } catch (err) {
-            textarea.classList.add("input-error");
-        }
-    });
+doneBtn.addEventListener('click', async () => {
+    const fullSerial = textarea.value.trim();
+    if (!fullSerial || fullSerial.length !== 9) {
+        alert("Введите серийный номер формата XXXX-XXXX");
+        return;
+    }
+    try {
+        await connectMQTT(fullSerial);
+        enterInterface(fullSerial);
+    } catch (err) {
+        textarea.classList.add("input-error");
+    }
 });
+buttonBack.addEventListener('click', () => {
+    try {
+        enterInterface(deviceState.serial);
+    } catch (err) {
+        console.log()
+    }
+});
+
