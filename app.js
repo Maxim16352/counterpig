@@ -370,7 +370,7 @@ function enterInterface(fullSerial) {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 500);
         }
     });
     if (deviceState.enteredBack == true){
@@ -401,7 +401,7 @@ function enterInterface(fullSerial) {
     setTimeout(() => img.classList.add('show'), 20);
 
     /* Состояния */
-    let titleValue = "Моя копилка";
+    let titleValue = deviceState.name;
     let tempTitle = null; // исправлено: была необъявленная переменная
 
     function createRow(textValue, imgSrc, action) {
@@ -442,6 +442,7 @@ function enterInterface(fullSerial) {
                 const finishEdit = () => {
                     titleValue = tempTitle ?? input.value;
                     text.textContent = titleValue;
+                    deviceState.name = titleValue;
 
                     row.replaceChild(text, input);
                     text.style.opacity = 1;
@@ -471,11 +472,11 @@ function enterInterface(fullSerial) {
                 if (text.dataset.shown === "true") {
                     text.textContent = fullSerial.slice(0, 4) + "-****";
                     text.dataset.shown = "false";
-                    icon.src = 'openeye.png'
+                    icon.src = 'openeye.png';
                 } else {
                     text.textContent = fullSerial;
                     text.dataset.shown = "true";
-                    icon.src = 'closeEye.png'
+                    icon.src = 'closeEye.png';
                 }
             });
         }
@@ -685,7 +686,7 @@ buttonInfo.addEventListener('click', () => {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 500);
         }
     });
 
