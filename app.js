@@ -471,9 +471,11 @@ function enterInterface(fullSerial) {
                 if (text.dataset.shown === "true") {
                     text.textContent = fullSerial.slice(0, 4) + "-****";
                     text.dataset.shown = "false";
+                    icon.src = 'openeye.png'
                 } else {
                     text.textContent = fullSerial;
                     text.dataset.shown = "true";
+                    icon.src = 'closeEye.png'
                 }
             });
         }
