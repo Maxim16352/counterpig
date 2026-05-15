@@ -370,7 +370,7 @@ function enterInterface(fullSerial) {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 100);
+            setTimeout(() => el.remove(), 400);
         }
     });
     if (deviceState.enteredBack == true){
@@ -686,13 +686,13 @@ buttonInfo.addEventListener('click', () => {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 100);
+            setTimeout(() => el.remove(), 400);
         }
     });
 
     document.querySelectorAll('.rowBlock').forEach(el => {
         setTimeout(() => el.classList.remove('show'), 20);
-        setTimeout(() => el.remove(), 100);
+        setTimeout(() => el.remove(), 400);
     });
     deviceState.enteredBack = true;
     container.classList.add('back');
