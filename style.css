@@ -278,7 +278,7 @@ html, body {
     width: 170px;
     display: block;
     opacity: 0;                
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 
 .jem-image.show {
@@ -291,7 +291,7 @@ html, body {
     gap: 12px;
     width: fit-content;
     opacity: 0;               
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .rowBlock.show {
     opacity: 1;                
@@ -308,7 +308,7 @@ html, body {
     font-size: 40px;
     color: #585858;
     opacity: 0;                
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .balance-text.show {
     opacity: 1;                
@@ -407,7 +407,7 @@ html, body {
     color: #585858;
     font-size: 20px;
     opacity: 0;
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .textPercent.show{
     opacity: 1;
@@ -485,7 +485,7 @@ html, body {
     color: #585858;
     font-size: 20px;
     opacity: 0;
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .nameProject.show{
     opacity: 1;
@@ -498,7 +498,7 @@ html, body {
     color: #585858;
     font-size: 14px;
     opacity: 0;
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .infoProject.show{
     opacity: 1;
@@ -514,7 +514,7 @@ html, body {
     color: #585858;
     font-size: 16px;
     opacity: 0;
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .creatorProject.show{
     opacity: 1;
@@ -529,7 +529,7 @@ html, body {
     color: #585858;
     font-size: 16px;
     opacity: 0;
-    transition: opacity 1000ms ease;
+    transition: opacity 0.15s ease;
 }
 .yearProject.show{
     opacity: 1;
