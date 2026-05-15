@@ -370,7 +370,7 @@ function enterInterface(fullSerial) {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 500);
+            setTimeout(() => el.remove(), 100);
         }
     });
     if (deviceState.enteredBack == true){
@@ -686,13 +686,13 @@ buttonInfo.addEventListener('click', () => {
         const el = document.querySelector(selector);
         if (el) {
             setTimeout(() => el.classList.remove('show'), 20);
-            setTimeout(() => el.remove(), 500);
+            setTimeout(() => el.remove(), 100);
         }
     });
 
     document.querySelectorAll('.rowBlock').forEach(el => {
         setTimeout(() => el.classList.remove('show'), 20);
-        setTimeout(() => el.remove(), 1000);
+        setTimeout(() => el.remove(), 100);
     });
     deviceState.enteredBack = true;
     container.classList.add('back');
@@ -703,7 +703,7 @@ buttonInfo.addEventListener('click', () => {
 
     const textProject = document.createElement('p');
     textProject.classList.add('nameProject');
-    textProject.textContent = 'SMART COUNTER';
+    textProject.textContent = 'Умная Копилка';
     main.appendChild(textProject);
     setTimeout(() => textProject.classList.add('show'), 20);
 
@@ -721,7 +721,7 @@ buttonInfo.addEventListener('click', () => {
 
     const yearProject = document.createElement('p');
     yearProject.classList.add('yearProject');
-    yearProject.textContent = '2025 г.';
+    yearProject.textContent = '2026 г.';
     main.appendChild(yearProject);
     setTimeout(() => yearProject.classList.add('show'), 20);
 });
