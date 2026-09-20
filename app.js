@@ -9,10 +9,10 @@ const mainBlock = document.querySelector('.glass-container.main');
 const buttonInfo = document.querySelector('.buttonInfo');
 const buttonBack = document.getElementById('backbutton');
 const buttonQuit = document.getElementById('quitbutton');
-const MQTT_BROKER = "wss://m1.wqtt.ru:18875/mqtt"; 
+const MQTT_BROKER = "wss://m6.wqtt.ru:21566/mqtt"; 
 
-const MQTT_USERNAME = "u_M8IWA2";
-const MQTT_PASSWORD = "Nw7DYR21";
+const MQTT_USERNAME = "u_NVFMM2";
+const MQTT_PASSWORD = "YbbjJP9N";
 
 let mqttClient = null;
 let currentSerial = null;
